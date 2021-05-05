@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header id="header" th:fragment="header">
+    <div>
+        <div id="header-wrapper" class="d-flex w-100">
+            <div class="site-logo-container d-flex">
+                <a th:href="@{/}" class="site-logo-link">
+                    <img th:src="@{/img/site-logo.png}" class="site-logo" alt="CoronApp"/>
+                </a>
+            </div>
+            <div class="w-100" th:replace="fragments/navbars :: navigation"></div>
+        </div>
+    </div>
+</header>
+</body>
+</html>

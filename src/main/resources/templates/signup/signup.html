@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign-Up</title>
+</head>
+<body>
+<section layout:fragment="content">
+<div>Create new account</div>
+<div th:if="${param.error}">
+    Username unavailable
+</div>
+<form th:action="@{/signup}" method="post">
+    <div><label>Username: <input type="text" name="username"/></label></div>
+    <div><label>Password: <input type="password" name="password"></label></div>
+    <div><input type="submit" value="Create Account"></div>
+</form>
+</section>
+</body>
+</html>

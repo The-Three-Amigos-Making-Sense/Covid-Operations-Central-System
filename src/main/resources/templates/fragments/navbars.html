@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="navbar navbar-expand-md navbar-dark bg-dark w-100" th:fragment="navigation">
+    <ul class="navbar-ul d-flex w-100" sec:authorize="isAnonymous()">
+        <li class="navbar-item  navbar-first">
+            <form th:action="@{/login}" method="get">
+                <input class="menu-button" type="submit" value="Login"/>
+            </form>
+        </li>
+        <li class="navbar-item">
+            <form th:action="@{/signup}" method="get">
+                <input class="menu-button" type="submit" value="Register"/>
+            </form>
+        </li>
+    </ul>
+    <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_USER')">
+        <li class="navbar-item navbar-first">
+            <form th:action="@{/logout}" method="post">
+                <input class="menu-button" type="submit" value="Sign Out"/>
+            </form>
+        </li>
+    </ul>
+    <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_ADMIN')">
+        <li class="navbar-item navbar-first">
+            <form th:action="@{/logout}" method="post">
+                <input class="menu-button" type="submit" value="Sign Out"/>
+            </form>
+        </li>
+        <li class="navbar-item">
+            <form>
+                <input class="menu-button" type="submit" value="Only For Admins"/>
+            </form>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
