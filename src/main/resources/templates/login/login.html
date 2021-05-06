@@ -7,17 +7,17 @@
 </head>
 <body>
 <section layout:fragment="content">
-  <div th:if="${param.error}">
-    Invalid username and password.
-  </div>
-  <div th:if="${param.logout}">
-   You have been logged out.
-  </div>
-  <div class="login-form">
-    <form th:action="@{/login}" method="post">
-      <div><label> User Name : <input type="text" name="username"/> </label></div>
-      <div><label> Password: <input type="password" name="password"/> </label></div>
-      <div><input type="submit" value="Sign In"/></div>
+  <div class="login-form-wrapper">
+    <div th:if="${param.error}">
+      Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+      You have been logged out.
+    </div>
+    <form class="login-form" th:action="@{/login}" method="post">
+      <input class="form-input" type="text" name="username" placeholder="Username"/>
+      <input class="form-input" type="password" name="password" placeholder="Password"/>
+      <input class="form-submit" type="submit" value="Login"/>
     </form>
   </div>
 </section>

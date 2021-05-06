@@ -24,9 +24,9 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try {
-            jdbcTemplate.update("insert into users (username, password, enabled) values (?, ?, ?);",
+            jdbcTemplate.update("insert into users values (?, ?, ?);",
                     user.getUsername(), user.getPassword(), true);
-            jdbcTemplate.update("insert into authorities (username, authority) values (?, ?);",
+            jdbcTemplate.update("insert into authorities values (?, ?);",
                     user.getUsername(), authority.getAuthority());
 
         } catch (DuplicateKeyException e) {
