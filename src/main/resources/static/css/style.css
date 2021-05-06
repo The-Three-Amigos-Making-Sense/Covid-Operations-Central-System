@@ -20,11 +20,11 @@ header {
 }
 
 .site-logo {
-    max-width: 175px;
+    max-height: 40px;
     vertical-align: middle;
 }
 .site-logo-link {
-    line-height: 4.9;
+    margin-left: 25px;
 }
 .navbar{
     text-align: right;
@@ -38,6 +38,7 @@ header {
 .navbar-item {
     display: list-item;
     list-style-type: none;
+    padding: 0 1px;
 }
 .navbar-first {
     margin-left: auto !important;
@@ -45,16 +46,16 @@ header {
 
 .menu-button {
     border: none;
-    padding: 25px 20px;
+    padding: 6px 20px;
     font-size: 1.5em;
     background-color: white;
 }
 .menu-button:hover {
-    background-color: aliceblue;
+    background-color: #00a2e85c;
     cursor: pointer;
 }
 .menu-button-active {
-    background-color: aliceblue;
+    background-color: #00a2e85c;
 }
 .content-body {
     padding: 100px 30px 10px 30px;
