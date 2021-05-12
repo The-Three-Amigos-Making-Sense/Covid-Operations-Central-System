@@ -9,12 +9,12 @@
     <ul class="navbar-ul d-flex w-100" sec:authorize="isAnonymous()">
         <li class="navbar-item  navbar-first">
             <form th:action="@{/login}" method="get">
-                <input class="menu-button" type="submit" value="Login"/>
+                <input class="menu-button tr-300" th:classappend="${navItem == 'login'}? 'menu-button-active'" type="submit" value="Login"/>
             </form>
         </li>
         <li class="navbar-item">
             <form th:action="@{/signup}" method="get">
-                <input class="menu-button" type="submit" value="Register"/>
+                <input class="menu-button tr-300" th:classappend="${navItem == 'signup'}? 'menu-button-active'" type="submit" value="Register"/>
             </form>
         </li>
     </ul>
