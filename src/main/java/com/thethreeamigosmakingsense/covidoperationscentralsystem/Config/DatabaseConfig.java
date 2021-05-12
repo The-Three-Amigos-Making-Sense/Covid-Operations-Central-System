@@ -32,6 +32,42 @@ public class DatabaseConfig {
                         "username varchar(50) not null, " +
                         "authority varchar(50) not null, " +
                         "constraint fk_authorities_users foreign key (username) references users(username));");
+        /*
+        jdbcTemplate.batchUpdate(
+                "CREATE TABLE IF NOT EXISTS Users (" +
+                        "cpr        int(10) NOT NULL AUTO_INCREMENT, " +
+                        "email      varchar(40) NOT NULL UNIQUE, " +
+                        "first_name varchar(25) NOT NULL, " +
+                        "last_name  varchar(25) NOT NULL, " +
+                        "phone_no   int(8) NOT NULL UNIQUE, " +
+                        "PRIMARY KEY (cpr));",
+
+                    "CREATE TABLE IF NOT EXISTS Authority ( " +
+                        "user_cpr  int(10) NOT NULL, " +
+                        "authority varchar(14) NOT NULL);",
+
+                    "CREATE TABLE Bookings (" +
+                        "booking_id int(10) NOT NULL, " +
+                        "user_cpr   int(10) NOT NULL, " +
+                        "`date`     date NOT NULL, " +
+                        "time       time NOT NULL, " +
+                        "type       varchar(7) NOT NULL, " +
+                        "PRIMARY KEY (booking_id));",
+
+                    "CREATE TABLE IF NOT EXISTS TestResult (" +
+                        "booking_id int(10) NOT NULL, " +
+                        "status     varchar(14) NOT NULL);",
+
+                    "CREATE TABLE IF NOT EXISTS Vaccine (\n" +
+                        "booking_id int(10) NOT NULL, \n" +
+                        "type       int(11) NOT NULL);\n",
+
+                    "ALTER TABLE Vaccine ADD CONSTRAINT FKVaccine210729 FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id);",
+                    "ALTER TABLE TestResult ADD CONSTRAINT FKTestResult401156 FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id);",
+                    "ALTER TABLE Bookings ADD CONSTRAINT FKBookings883765 FOREIGN KEY (user_cpr) REFERENCES Users (cpr);",
+                    "ALTER TABLE Authority ADD CONSTRAINT FKAuthority423494 FOREIGN KEY (user_cpr) REFERENCES Users (cpr);");
+                */
+
 
         int admins = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM authorities WHERE authority = 'ROLE_ADMIN'", Integer.class);
