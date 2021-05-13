@@ -1,7 +1,7 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 
 public class User {
-    private int cpr;
+    private int CPR;
     private String email;
     private String firstName;
     private String lastName;
@@ -9,8 +9,8 @@ public class User {
     private String password;
     private boolean enabled = true;
 
-    public User(int cpr, String email, String firstName, String lastName, int phoneNo, String password) {
-        this.cpr = cpr;
+    public User(int CPR, String email, String firstName, String lastName, int phoneNo, String password) {
+        this.CPR = CPR;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,12 +22,12 @@ public class User {
         this.password = password;
     }
 
-    public int getCpr() {
-        return cpr;
+    public int getCPR() {
+        return CPR;
     }
 
-    public void setCpr(int cpr) {
-        this.cpr = cpr;
+    public void setCpr(int CPR) {
+        this.CPR = CPR;
     }
 
     public String getEmail() {
