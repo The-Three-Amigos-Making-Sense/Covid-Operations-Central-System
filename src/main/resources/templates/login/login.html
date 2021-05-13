@@ -13,11 +13,11 @@
     </div>
     <form class="login-form" th:action="@{/login}" method="post">
       <input class="form-input" th:classappend="${param.error} ? 'form-input-error'"
-             type="text" name="username" placeholder="Username"/>
+             type="text" name="username" placeholder="CPR Number"/>
       <input class="form-input" th:classappend="${param.error} ? 'form-input-error'"
              type="password" name="password" placeholder="Password"/>
       <div class="login-alert-wrapper">
-        <div class="login-alert" th:if="${param.error}">Incorrect username or password</div>
+        <div class="login-alert" th:if="${param.error}">Incorrect CPR or password</div>
         <div class="login-alert" th:if="${param.logout}">You have been logged out</div>
       </div>
       <input class="form-submit" type="submit" value="Login"/>

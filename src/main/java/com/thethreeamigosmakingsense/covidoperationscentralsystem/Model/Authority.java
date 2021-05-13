@@ -2,16 +2,16 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 
 public class Authority {
 
-    int CPR;
-    String authority;
+    private String username; // actually CPR
+    private String authority;
 
     public Authority(User user, String authority) {
-        CPR = user.getCPR();
+        username = user.getUsername();
         this.authority = authority;
     }
 
-    public int getUserCPR() {
-        return CPR;
+    public String getUsername() {
+        return username;
     }
 
     public String getAuthority() {

@@ -5,15 +5,15 @@ import java.time.LocalTime;
 
 public class Booking {
 
-    int booking_id;
-    int user_cpr;
-    LocalDate date;
-    LocalTime time;
-    String type;
+    private int booking_id;
+    private String username;
+    private LocalDate date;
+    private LocalTime time;
+    private String type;
 
-    public Booking(int booking_id, int user_cpr, LocalDate date, LocalTime time, String type) {
+    public Booking(int booking_id, String username, LocalDate date, LocalTime time, String type) {
         this.booking_id = booking_id;
-        this.user_cpr = user_cpr;
+        this.username = username;
         this.date = date;
         this.time = time;
         this.type = type;
@@ -27,12 +27,12 @@ public class Booking {
         this.booking_id = booking_id;
     }
 
-    public int getUser_cpr() {
-        return user_cpr;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser_cpr(int user_cpr) {
-        this.user_cpr = user_cpr;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public LocalDate getDate() {
