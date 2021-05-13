@@ -3,19 +3,23 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 public class User {
     private String username; // actually CPR
     private String email;
-    private String firstName;
-    private String lastName;
-    private int phoneNo;
+    private String firstname;
+    private String lastname;
+    private String phone_no;
     private String password;
     private boolean enabled = true;
 
-    public User(String username, String email, String firstName, String lastName, int phoneNo, String password) {
+    public User(String username, String email, String firstname, String lastname, String phone_no, String password) {
         this.username = username;
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNo = phoneNo;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.phone_no = phone_no;
         this.password = password;
+    }
+
+    public User() {
+
     }
 
     public String getUsername() {
@@ -34,28 +38,28 @@ public class User {
         this.email = email;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public int getPhoneNo() {
-        return phoneNo;
+    public String getPhone_no() {
+        return phone_no;
     }
 
-    public void setPhoneNo(int phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setPhone_no(String phone_no) {
+        this.phone_no = phone_no;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstName) {
+        this.firstname = firstName;
     }
 
     public String getPassword() {

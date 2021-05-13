@@ -35,24 +35,24 @@ public class DatabaseConfig {
 
         jdbcTemplate.batchUpdate(
                 "CREATE TABLE IF NOT EXISTS Users (" +
-                        "username   varchar(10) NOT NULL, " +
+                        "username   varchar(11) NOT NULL, " +
                         "email      varchar(320) NOT NULL UNIQUE, " +
-                        "first_name varchar(25) NOT NULL, " +
-                        "last_name  varchar(25) NOT NULL, " +
-                        "phone_no   int(8) NOT NULL UNIQUE, " +
+                        "firstname  varchar(25) NOT NULL, " +
+                        "lastname   varchar(25) NOT NULL, " +
+                        "phone_no   varchar(8) NOT NULL UNIQUE, " +
                         "password   varchar(60) NOT NULL, " +
                         "enabled    boolean NOT NULL, " +
                         "PRIMARY KEY (username));",
 
                 "CREATE TABLE IF NOT EXISTS Authorities (" +
-                        "username  varchar(10) NOT NULL, " +
+                        "username  varchar(11) NOT NULL, " +
                         "authority varchar(14) NOT NULL, " +
                         "PRIMARY KEY (username), " +
                         "CONSTRAINT Authorities FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",
 
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
                         "booking_id int(10) AUTO_INCREMENT NOT NULL, " +
-                        "username   varchar(10) NOT NULL, " +
+                        "username   varchar(11) NOT NULL, " +
                         "`date`     date NOT NULL, " +
                         "time       time NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
@@ -78,11 +78,11 @@ public class DatabaseConfig {
 
 
         if (admins == 0) {
-            User user = new User("admin", "admin@cocs.com", "Admin", "Admin", 12345678, "0000");
+            User user = new User("admin", "admin@cocs.com", "Admin", "Admin", "12345678", "0000");
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             Authority authority = new Authority(user, "ROLE_ADMIN");
-            jdbcTemplate.update("insert into users (username, email, first_name, last_name, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);",
-                    user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPhoneNo(), user.getPassword(), true);
+            jdbcTemplate.update("insert into users (username, email, firstname, lastname, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);",
+                    user.getUsername(), user.getEmail(), user.getFirstname(), user.getLastname(), user.getPhone_no(), user.getPassword(), true);
             jdbcTemplate.update("insert into authorities (username, authority) values (?, ?);",
                     user.getUsername(), authority.getAuthority());
         }

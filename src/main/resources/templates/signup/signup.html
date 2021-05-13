@@ -13,12 +13,24 @@
             <h1>Create New Account</h1>
         </div>
         <form class="login-form" th:action="@{/signup}" method="post">
-            <input class="form-input" th:classappend="${param.error} ? 'form-input-error'"
-                   type="text" name="username" placeholder="Username"/>
-            <input class="form-input" type="password" name="password" placeholder="Password">
+            <input class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+                   type="text" name="username" placeholder="CPR (ddmmyy-xxxx)"/>
             <div class="login-alert-wrapper">
-                <div class="login-alert" th:if="${param.error}"> Username unavailable</div>
+                <div class="login-alert" th:if="${param.error}">
+                    CPR number has already been registered<br>
+                    or CPR was not formatted using DDMMYY-XXXX
+                </div>
             </div>
+            <input class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+                   type="text" name="email" placeholder="Email Address"/>
+            <input class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+                   type="text" name="firstname" placeholder="Firstname"/>
+            <input class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+                   type="text" name="lastname" placeholder="Lastname"/>
+            <input class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+                   type="text" name="phone_no" placeholder="Phone Number"/>
+            <input class="form-input" type="password" name="password" placeholder="Password">
+
             <input class="form-submit" type="submit" value="Create Account">
         </form>
     </div>
