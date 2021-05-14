@@ -20,7 +20,7 @@ public class UserService {
         return userRepository.saveNewUser(user);
     }
 
-    public boolean checkEmptyFields(User user) {
+    private boolean checkEmptyFields(User user) {
         if (user.getEmail().isBlank())     return false;
         if (user.getFirstname().isBlank()) return false;
         if (user.getLastname().isBlank())  return false;
@@ -28,7 +28,7 @@ public class UserService {
         else                               return true;
     }
 
-    public boolean checkValidPhoneNo(User user) {
+    private boolean checkValidPhoneNo(User user) {
 
         try {
             Integer.parseInt(user.getPhone_no());
@@ -38,7 +38,7 @@ public class UserService {
         return user.getPhone_no().length() == 8;
     }
 
-    public boolean checkValidCPR(User user) {
+    private boolean checkValidCPR(User user) {
 
         String cpr = user.getUsername();
 
