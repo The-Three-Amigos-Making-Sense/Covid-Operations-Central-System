@@ -1,18 +1,21 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository;
 
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
-import com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Authority;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.List;
 
 @Repository
 @DependsOn("securityConfig")
@@ -27,9 +30,15 @@ public class UserRepository {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
-    public void fetchUser() {
+    public User fetchUser() {
 
-        System.out.println(httpServletRequest.getRemoteUser());
+        String remoteUser = httpServletRequest.getRemoteUser();
+
+        String sql = "SELECT username, email, firstname, lastname, " +
+                "phone_no FROM users WHERE username = ?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        List<User> userList = jdbcTemplate.query(sql, rowMapper, remoteUser);
+        return userList.get(0);
 
     }
 
