@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="login-form-wrapper">
+        <div class="login-form-title">
+            <h1>Book a Covid-19 Test</h1>
+        </div>
+        <form class="login-form" th:action="@{/booking}" method="post">
+            <select class="form-select">
+
+            </select>
+            <input class="form-input" th:classappend="${param.error} ? 'form-input-error'"
+                   type="text" name="username" placeholder="CPR Number"/>
+            <input class="form-input" th:classappend="${param.error} ? 'form-input-error'"
+                   type="password" name="password" placeholder="Password"/>
+            <div class="login-alert-wrapper">
+                <div class="login-alert" th:if="${param.error}">Incorrect CPR or password</div>
+                <div class="login-alert" th:if="${param.logout}">You have been logged out</div>
+            </div>
+            <input class="form-submit" type="submit" value="Login"/>
+
+        </form>
+    </div>
+
+</section>
+
+</body>
+</html>
