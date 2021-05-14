@@ -51,10 +51,10 @@ public class DatabaseConfig {
                         "CONSTRAINT Authorities FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",
 
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
-                        "booking_id int(10) AUTO_INCREMENT NOT NULL, " +
+                        "booking_id int AUTO_INCREMENT NOT NULL, " +
                         "username   varchar(11) NOT NULL, " +
-                        "`date`     date NOT NULL, " +
-                        "time       time NOT NULL, " +
+                        "`date`     varchar(10) NOT NULL, " +
+                        "time       varchar(5) NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
                         "CONSTRAINT Bookings FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",

@@ -1,17 +1,17 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class Booking {
 
     private int booking_id;
     private String username;
-    private LocalDate date;
-    private LocalTime time;
+    private String date;
+    private String time;
     private String type;
 
-    public Booking(int booking_id, String username, LocalDate date, LocalTime time, String type) {
+    public Booking() {
+    }
+
+    public Booking(int booking_id, String username, String date, String time, String type) {
         this.booking_id = booking_id;
         this.username = username;
         this.date = date;
@@ -35,19 +35,19 @@ public class Booking {
         this.username = username;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
