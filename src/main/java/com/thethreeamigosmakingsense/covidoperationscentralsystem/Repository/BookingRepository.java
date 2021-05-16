@@ -1,18 +1,19 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository;
 
-import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Authority;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
-import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -29,19 +30,28 @@ public class BookingRepository {
 
     public boolean createBooking(Booking booking) {
 
-        System.out.println(booking.getTime());
+        String bookingsSQL = "insert into bookings values (?, ?, ?, ?, ?);";
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
-            int id = jdbcTemplate.update("insert into bookings values (?, ?, ?, ?, ?);",
-                    null, http.getRemoteUser(), booking.getDate(),
-                    booking.getTime(), booking.getType());
+            jdbcTemplate.update(
+                    connection -> {
+                        PreparedStatement ps = connection.prepareStatement(bookingsSQL, new String[] {"id"});
+                        ps.setString(1, null);
+                        ps.setString(2, http.getRemoteUser());
+                        ps.setString(3, booking.getDate());
+                        ps.setString(4, booking.getTime());
+                        ps.setString(5, booking.getType());
+                        return ps;
+                    },
+                    keyHolder);
 
             if (booking.getType().equals("test")) {
-                jdbcTemplate.update("insert into TestResult values (?, ?);", id, "TEST_PENDING");
+                jdbcTemplate.update("insert into TestResult values (?, ?);", keyHolder.getKey(), "TEST_PENDING");
 
             } else if (booking.getType().equals("vaccine")) {
-                jdbcTemplate.update("insert into authorities values (?, ?);",
-                        id, "FIRST_SHOT");
+                jdbcTemplate.update("insert into authorities values (?, ?);", keyHolder.getKey()
+                        , "FIRST_SHOT");
             }
 
 
@@ -61,7 +71,16 @@ public class BookingRepository {
 
         String sql = "SELECT * FROM bookings";
         RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
-        List<Booking> bookingsList = jdbcTemplate.query(sql, rowMapper);
-        return bookingsList;
+        return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    private boolean checkAvailability(Booking booking) {
+
+        for (Booking booked : fetchAllBookings()) {
+            if (booked.getDate().equals(booking.getDate()) &&
+                    booked.getTime().equals(booking.getTime()))
+                return false;
+        }
+        return true;
     }
 }

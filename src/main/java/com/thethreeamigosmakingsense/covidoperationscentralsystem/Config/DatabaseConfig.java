@@ -51,7 +51,7 @@ public class DatabaseConfig {
                         "CONSTRAINT Authorities FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",
 
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
-                        "booking_id int AUTO_INCREMENT NOT NULL, " +
+                        "booking_id int AUTO_INCREMENT, " +
                         "username   varchar(11) NOT NULL, " +
                         "`date`     varchar(10) NOT NULL, " +
                         "time       varchar(5) NOT NULL, " +
@@ -69,7 +69,9 @@ public class DatabaseConfig {
                         "booking_id int(10) NOT NULL, " +
                         "type       varchar(11) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
-                        "CONSTRAINT Vaccine FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id) ON DELETE CASCADE);"
+                        "CONSTRAINT Vaccine FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
+
+                "ALTER TABLE Bookings AUTO_INCREMENT = 1"
         );
 
 

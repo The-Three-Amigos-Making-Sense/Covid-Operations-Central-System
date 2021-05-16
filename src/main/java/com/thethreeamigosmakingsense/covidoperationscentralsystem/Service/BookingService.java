@@ -14,6 +14,7 @@ public class BookingService {
     BookingRepository bookingRepository;
 
     public boolean newBooking(Booking booking) {
+        System.out.println(booking.getDate() + "    " + booking.getTime());
         return bookingRepository.createBooking(booking);
     }
 
