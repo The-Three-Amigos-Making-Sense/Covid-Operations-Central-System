@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -28,11 +26,11 @@ public class UserRepository {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private HttpServletRequest httpServletRequest;
+    private HttpServletRequest http;
 
     public User fetchUser() {
 
-        String remoteUser = httpServletRequest.getRemoteUser();
+        String remoteUser = http.getRemoteUser();
 
         String sql = "SELECT username, email, firstname, lastname, " +
                 "phone_no FROM users WHERE username = ?";

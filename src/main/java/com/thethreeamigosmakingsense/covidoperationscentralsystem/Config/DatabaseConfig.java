@@ -22,18 +22,8 @@ public class DatabaseConfig {
     @Bean
     public void initializeDatabase() {
 
-        /*jdbcTemplate.batchUpdate(
-                "create table if not exists users(" +
-                        "username varchar(50) not null primary key, " +
-                        "password varchar(60) not null, " +
-                        "enabled boolean not null);",
 
-                "create table if not exists authorities (" +
-                        "username varchar(50) not null, " +
-                        "authority varchar(50) not null, " +
-                        "constraint fk_authorities_users foreign key (username) references users(username));");*/
-
-        jdbcTemplate.batchUpdate(
+        String[] createTables = {
                 "CREATE TABLE IF NOT EXISTS Users (" +
                         "username   varchar(11) NOT NULL, " +
                         "email      varchar(320) NOT NULL UNIQUE, " +
@@ -51,10 +41,10 @@ public class DatabaseConfig {
                         "CONSTRAINT Authorities FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",
 
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
-                        "booking_id int(10) AUTO_INCREMENT NOT NULL, " +
+                        "booking_id int AUTO_INCREMENT, " +
                         "username   varchar(11) NOT NULL, " +
-                        "`date`     date NOT NULL, " +
-                        "time       time NOT NULL, " +
+                        "`date`     varchar(10) NOT NULL, " +
+                        "time       varchar(5) NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
                         "CONSTRAINT Bookings FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",
@@ -69,22 +59,34 @@ public class DatabaseConfig {
                         "booking_id int(10) NOT NULL, " +
                         "type       varchar(11) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
-                        "CONSTRAINT Vaccine FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id) ON DELETE CASCADE);"
-        );
+                        "CONSTRAINT Vaccine FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
+
+                "ALTER TABLE Bookings AUTO_INCREMENT = 1"
+        };
+
+        jdbcTemplate.batchUpdate(createTables);
 
 
-        int admins = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM authorities WHERE authority = 'ROLE_ADMIN'", Integer.class);
+        // Creates an Admin account if none exists
+        String getNumberOfAdmins = "SELECT COUNT(*) FROM authorities WHERE authority = 'ROLE_ADMIN'";
+        Integer numberOfAdmins = jdbcTemplate.queryForObject(getNumberOfAdmins, Integer.class);
 
+        if (numberOfAdmins == null || numberOfAdmins == 0) {
+            User admin = new User("Admin", "admin@cocs.com", "Admin",
+                    "Admin", "12345678", "0000");
+            admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 
-        if (admins == 0) {
-            User user = new User("admin", "admin@cocs.com", "Admin", "Admin", "12345678", "0000");
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            Authority authority = new Authority(user, "ROLE_ADMIN");
-            jdbcTemplate.update("insert into users (username, email, firstname, lastname, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);",
-                    user.getUsername(), user.getEmail(), user.getFirstname(), user.getLastname(), user.getPhone_no(), user.getPassword(), true);
-            jdbcTemplate.update("insert into authorities (username, authority) values (?, ?);",
-                    user.getUsername(), authority.getAuthority());
+            Authority adminAuthority = new Authority(admin, "ROLE_ADMIN");
+
+            String insertAdmin = "insert into users (username, email, firstname, " +
+                    "lastname, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);";
+            jdbcTemplate.update(insertAdmin,
+                    admin.getUsername(), admin.getEmail(), admin.getFirstname(),
+                    admin.getLastname(), admin.getPhone_no(), admin.getPassword(), true);
+
+            String insertAdminAuthority = "insert into authorities (username, authority) values (?, ?);";
+            jdbcTemplate.update(insertAdminAuthority,
+                    admin.getUsername(), adminAuthority.getAuthority());
         }
 
     }
