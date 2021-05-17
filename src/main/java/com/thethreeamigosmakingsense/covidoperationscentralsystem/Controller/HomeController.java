@@ -23,9 +23,4 @@ public class HomeController {
 
         return "home/home";
     }
-
-    @GetMapping("/booking")
-    public String booking() {
-        return "Booking/booking";
-    }
 }

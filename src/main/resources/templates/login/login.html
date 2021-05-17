@@ -12,9 +12,9 @@
       <h1>Login</h1>
     </div>
     <form class="login-form" th:action="@{/login}" method="post">
-      <input class="form-input" th:classappend="${param.error} ? 'form-input-error'"
-             type="text" name="username" placeholder="CPR Number"/>
-      <input class="form-input" th:classappend="${param.error} ? 'form-input-error'"
+      <input required class="form-input" th:classappend="${param.error} ? 'form-input-error'"
+             type="text" name="username" placeholder="CPR Number" />
+      <input required class="form-input" th:classappend="${param.error} ? 'form-input-error'"
              type="password" name="password" placeholder="Password"/>
       <div class="login-alert-wrapper">
         <div class="login-alert" th:if="${param.error}">Incorrect CPR or password</div>
