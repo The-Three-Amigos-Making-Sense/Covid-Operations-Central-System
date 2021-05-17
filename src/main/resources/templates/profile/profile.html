@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Information</title>
+</head>
+<body>
+<section layout:fragment="content">
+   <h1>Username: [[${username}]]</h1>
+   <h1>Email: [[${email}]]</h1>
+   <h1>Firstname: [[${firstname}]]</h1>
+   <h1>Lastname: [[${lastname}]]</h1>
+   <h1>Phone_no: [[${phone_no}]]</h1>
+    <button type="button">Edit Information</button>
+</section>
+</body>
+</html>

@@ -12,6 +12,7 @@
                 <input class="menu-button tr-300" th:classappend="${navItem == 'login'}? 'menu-button-active'" type="submit" value="Login"/>
             </form>
         </li>
+
         <li class="navbar-item">
             <form th:action="@{/signup}" method="get">
                 <input class="menu-button tr-300" th:classappend="${navItem == 'signup'}? 'menu-button-active'" type="submit" value="Register"/>
@@ -20,10 +21,27 @@
     </ul>
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_USER')">
         <li class="navbar-item navbar-first">
+            <form th:action="@{/test}" method="get">
+                <input class="menu-button" th:classappend="${navItem == 'test'}? 'menu-button-active'" type="submit" value="Covid-Test"/>
+            </form>
+        </li>
+        <li class="navbar-item">
+            <form th:action="@{/vaccine}" method="get">
+                <input class="menu-button" th:classappend="${navItem == 'vaccine'}? 'menu-button-active'" type="submit" value="Covid-Vaccine"/>
+            </form>
+        </li>
+        <li class="navbar-item">
+            <form th:action="@{/profile}" method="get">
+                <input class="menu-button" th:classappend="${navItem == 'profile'}? 'menu-button-active'" type="submit" value="Profile"/>
+            </form>
+        </li>
+
+        <li class="navbar-item">
             <form th:action="@{/logout}" method="post">
                 <input class="menu-button" type="submit" value="Sign Out"/>
             </form>
         </li>
+
     </ul>
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_ADMIN')">
         <li class="navbar-item navbar-first">
