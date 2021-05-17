@@ -7,12 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.TreeMap;
 
 @Controller
 public class BookingController {
@@ -20,24 +18,39 @@ public class BookingController {
     @Autowired
     BookingService bookingService;
 
+    @Autowired
+    HttpServletRequest http;
+
     @GetMapping("/booking")
-    public String booking(Model model, String selectedDate) {
+    public String booking(Model model) {
 
-        System.out.println(selectedDate);
-        LocalDate date = LocalDate.now();
+        LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateString = date.format(formatter);
+        String date = localDate.format(formatter);
 
-        model.addAttribute("times", bookingService.getTimes());
+        model.addAttribute("type", "to get a covid-19 test");
+        model.addAttribute("date", date);
+        model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
 
-        return "booking/booking";
+        if (bookingService.userHasActiveBooking(http.getRemoteUser(), "TEST"))
+            return "booking/userHasBooking";
+        else return "booking/booking";
     }
 
-    @PostMapping("/booking")
+    @PostMapping("/booked")
     public String booking(Booking booking) {
 
         if (bookingService.newBooking(booking)) {
             return "booking/success";
         } else return "redirect:/booking?error";
+    }
+
+    @PostMapping("/booking")
+    public String fetchAvailability(Model model, String date) {
+
+        model.addAttribute("date", date);
+        model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
+
+        return "booking/booking";
     }
 }

@@ -1,5 +1,7 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 
+import java.time.LocalDateTime;
+
 public class Booking {
 
     private String username;
@@ -29,6 +31,16 @@ public class Booking {
         return date;
     }
 
+    public LocalDateTime getLocalDateTime() {
+        int year = Integer.parseInt(date.substring(6));
+        int month = Integer.parseInt(date.substring(3, 5));
+        int day = Integer.parseInt(date.substring(0, 2));
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3));
+
+        return LocalDateTime.of(year, month, day, hour, minute, 0, 0);
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
@@ -47,5 +59,16 @@ public class Booking {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getConcatTime() {
+        return time.substring(0, 2) + time.substring(3);
+    }
+
+    public boolean equals(Booking booking) {
+        return
+                this.date.equals(booking.getDate()) &&
+                this.time.equals(booking.getTime()) &&
+                this.type.equals(booking.getType());
     }
 }

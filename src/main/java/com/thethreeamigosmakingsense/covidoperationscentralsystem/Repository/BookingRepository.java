@@ -1,6 +1,7 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository;
 
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
+import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -67,20 +68,16 @@ public class BookingRepository {
 
     }
 
-    public List<Booking> fetchAllBookings() {
+    public List<Booking> fetchAllBookings(String type) {
 
-        String sql = "SELECT * FROM bookings";
+        String sql = "SELECT * FROM bookings WHERE type = ?";
         RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(sql, rowMapper, type);
     }
 
-    private boolean checkAvailability(Booking booking) {
-
-        for (Booking booked : fetchAllBookings()) {
-            if (booked.getDate().equals(booking.getDate()) &&
-                    booked.getTime().equals(booking.getTime()))
-                return false;
-        }
-        return true;
+    public List<Booking> fetchUsersBookings(String username) {
+        String sql = "SELECT * FROM bookings WHERE username = ?";
+        RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
+        return jdbcTemplate.query(sql, rowMapper, username);
     }
 }

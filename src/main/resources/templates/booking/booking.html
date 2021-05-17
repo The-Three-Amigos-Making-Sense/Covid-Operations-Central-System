@@ -10,12 +10,9 @@
           rel="stylesheet" type="text/css" media="screen"/>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-        let date = new Date();
-        let dd = ('0' + date.getDate()).slice(-2);
-        let mm = ('0' + (date.getMonth()+1)).slice(-2);
-        let yy = date.getFullYear();
-        let formattedDate = dd + "-" + mm + "-" + yy;
+    <script type="text/javascript">
+
+        let formattedDate = "[[${date}]]";
 
         $(function() {
             $("#datepicker")
@@ -30,7 +27,8 @@
                     }
                 })
                 .keydown(function (event) {
-                    event.preventDefault()})
+                    event.preventDefault()
+                })
                 .val(formattedDate)
                 .onSelect();
         });
@@ -43,30 +41,21 @@
             <h1>Book a Covid-19 Test</h1>
         </div>
 
-        <form hidden id="selectedDateForm" th:action="@{/fetchAvailability}" method="post">
+        <form hidden id="selectedDateForm" th:action="@{/booking}" method="post">
             <input readonly id="selectedDateInput" name="date" type="text">
         </form>
-        <form class="login-form" th:action="@{/booking}" method="post">
+        <form class="login-form" th:action="@{/booked}" method="post">
             <input required type="text"
                    name="date" id="datepicker" autocomplete="off" />
 
             <select required name="time">
                 <option disabled selected value style="display: none">Select Time</option>
-                <option th:each="time : ${times}">[[${time.getKey()}]]</option>
+                <option th:each="time : ${times}">[[${time}]]</option>
             </select>
-            <input type="hidden" name="type" value="test">
+            <input type="hidden" name="type" value="TEST">
             <input class="form-submit" type="submit" value="Book Test">
         </form>
     </div>
-    <script>
-        let date = new Date();
-        let dd = ('0' + date.getDate()).slice(-2);
-        let mm = ('0' + (date.getMonth()+1)).slice(-2);
-        let yy = date.getFullYear();
-        let formattedDate = dd + "-" + mm + "-" + yy;
-        //document.getElementById("datepicker").setAttribute("placeholder", formattedDate)
-        //document.getElementById("datepicker").setAttribute("th:value", formattedDate);
-    </script>
 </section>
 
 </body>
