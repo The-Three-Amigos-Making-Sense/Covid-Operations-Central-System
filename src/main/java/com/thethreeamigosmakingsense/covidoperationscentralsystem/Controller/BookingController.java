@@ -21,7 +21,7 @@ public class BookingController {
     @Autowired
     HttpServletRequest http;
 
-    @GetMapping("/booking")
+    @GetMapping("/test")
     public String booking(Model model) {
 
         LocalDate localDate = LocalDate.now();
@@ -38,6 +38,15 @@ public class BookingController {
         else return "booking/booking";
     }
 
+    @PostMapping("/test")
+    public String fetchAvailability(Model model, String date) {
+
+        model.addAttribute("date", date);
+        model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
+
+        return "booking/booking";
+    }
+
     @PostMapping("/booked")
     public String booking(Model model, Booking booking) {
 
@@ -51,12 +60,5 @@ public class BookingController {
         } else return "redirect:/booking?error";
     }
 
-    @PostMapping("/booking")
-    public String fetchAvailability(Model model, String date) {
 
-        model.addAttribute("date", date);
-        model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
-
-        return "booking/booking";
-    }
 }
