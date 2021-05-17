@@ -1,7 +1,6 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Service;
 
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
-import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,12 +91,14 @@ public class BookingService {
 
         // Loop checks for availability of every timeslot and saves available times to list
         addTimes:
-        for (hour = openingHour, minute = openingMinute; hour < 19; minute += timePerTest) {
+        for (hour = openingHour, minute = openingMinute ;; minute += timePerTest) {
 
             if (minute >= 60) {
                 hour++;
                 minute = 0;
             }
+
+            if (hour == 19) break;
 
             // Saves hour and minutes to Strings to ensure they will always be in two digits
             sHour = Integer.toString(hour);

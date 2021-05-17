@@ -28,7 +28,8 @@ public class BookingController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String date = localDate.format(formatter);
 
-        model.addAttribute("type", "to get a covid-19 test");
+
+        model.addAttribute("type", "covid-19 test");
         model.addAttribute("date", date);
         model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
 
@@ -38,7 +39,12 @@ public class BookingController {
     }
 
     @PostMapping("/booked")
-    public String booking(Booking booking) {
+    public String booking(Model model, Booking booking) {
+
+        if (booking.getType().equals("TEST"))
+            model.addAttribute("type", "covid-19 test");
+        else if (booking.getType().equals("VACCINE"))
+            model.addAttribute("type", "covid-19 vaccine");
 
         if (bookingService.newBooking(booking)) {
             return "booking/success";
