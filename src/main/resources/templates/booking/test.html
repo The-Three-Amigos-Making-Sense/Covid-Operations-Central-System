@@ -12,7 +12,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
 
-        let formattedDate = "[[${date}]]";
+        let date = "[[${date}]]";
 
         $(function() {
             $("#datepicker")
@@ -29,7 +29,7 @@
                 .keydown(function (event) {
                     event.preventDefault()
                 })
-                .val(formattedDate)
+                .val(date)
                 .onSelect();
         });
     </script>

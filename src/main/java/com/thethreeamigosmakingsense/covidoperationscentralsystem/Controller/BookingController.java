@@ -22,33 +22,49 @@ public class BookingController {
     HttpServletRequest http;
 
     @GetMapping("/test")
-    public String booking(Model model) {
-
-        LocalDate localDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String date = localDate.format(formatter);
-
+    public String test(Model model) {
 
         model.addAttribute("type", "covid-19 test");
-        model.addAttribute("date", date);
-        model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
+        model.addAttribute("date", getCurrentDate());
+        model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "TEST"));
 
         if (bookingService.userHasActiveBooking(http.getRemoteUser(), "TEST"))
             return "booking/userHasBooking";
-        else return "booking/booking";
+        else return "booking/test";
     }
 
     @PostMapping("/test")
-    public String fetchAvailability(Model model, String date) {
+    public String fetchTestAvailability(Model model, String date) {
 
         model.addAttribute("date", date);
         model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
 
-        return "booking/booking";
+        return "booking/test";
+    }
+
+    @GetMapping("/vaccine")
+    public String vaccine(Model model) {
+
+        model.addAttribute("type", "covid-19 vaccine");
+        model.addAttribute("date", getCurrentDate());
+        model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "VACCINE"));
+
+        if (bookingService.userHasActiveBooking(http.getRemoteUser(), "VACCINE"))
+            return "booking/userHasBooking";
+        else return "booking/vaccine";
+    }
+
+    @PostMapping("/vaccine")
+    public String fetchVaccineAvailability(Model model, String date) {
+
+        model.addAttribute("date", date);
+        model.addAttribute("times", bookingService.getAvailableTimes(date, "VACCINE"));
+
+        return "booking/vaccine";
     }
 
     @PostMapping("/booked")
-    public String booking(Model model, Booking booking) {
+    public String test(Model model, Booking booking) {
 
         if (booking.getType().equals("TEST"))
             model.addAttribute("type", "covid-19 test");
@@ -57,8 +73,13 @@ public class BookingController {
 
         if (bookingService.newBooking(booking)) {
             return "booking/success";
-        } else return "redirect:/booking?error";
+        } else return "redirect:/test?error";
     }
 
+    private String getCurrentDate() {
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return localDate.format(formatter);
+    }
 
 }

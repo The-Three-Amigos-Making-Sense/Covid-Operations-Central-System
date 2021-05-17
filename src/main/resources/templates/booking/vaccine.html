@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Covid Test</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link th:href="@{/css/datepicker.css}"
+          rel="stylesheet" type="text/css" media="screen"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+        let date = "[[${date}]]";
+
+        $(function() {
+            $("#datepicker")
+                .datepicker({
+                    minDate: 0,
+                    maxDate: "+1M",
+                    firstDay: 1,
+                    dateFormat: "dd-mm-yy",
+                    altField: "#selectedDateInput",
+                    onSelect: function () {
+                        $('#selectedDateForm').submit();
+                    }
+                })
+                .keydown(function (event) {
+                    event.preventDefault()
+                })
+                .val(date)
+                .onSelect();
+        });
+    </script>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="login-form-wrapper">
+        <div class="login-form-title">
+            <h1>Book Time to get Vaccinated</h1>
+        </div>
+
+        <form hidden id="selectedDateForm" th:action="@{/vaccine}" method="post">
+            <input readonly id="selectedDateInput" name="date" type="text">
+        </form>
+        <form class="login-form" th:action="@{/booked}" method="post">
+            <input required type="text"
+                   name="date" id="datepicker" autocomplete="off" />
+
+            <select required name="time">
+                <option disabled selected value style="display: none">Select Time</option>
+                <option th:each="time : ${times}">[[${time}]]</option>
+            </select>
+            <input type="hidden" name="type" value="VACCINE">
+            <input class="form-submit" type="submit" value="Book Vaccine">
+        </form>
+    </div>
+</section>
+
+</body>
+
+</html>
