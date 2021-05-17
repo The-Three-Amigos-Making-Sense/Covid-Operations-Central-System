@@ -89,5 +89,26 @@ public class DatabaseConfig {
                     admin.getUsername(), adminAuthority.getAuthority());
         }
 
+        // Creates a Personnel account if none exists
+        String getNumberOfPersonnel = "SELECT COUNT(*) FROM authorities WHERE authority = 'ROLE_PERSONNEL'";
+        Integer numberOfPersonnel = jdbcTemplate.queryForObject(getNumberOfPersonnel, Integer.class);
+
+        if (numberOfPersonnel == null || numberOfPersonnel == 0) {
+            User personnel = new User("Personnel", "personnel@cocs.com", "Test",
+                    "Personnel", "87654321", "0000");
+            personnel.setPassword(passwordEncoder.encode(personnel.getPassword()));
+
+            Authority personnelAuthority = new Authority(personnel, "ROLE_PERSONNEL");
+
+            String insertPersonnel = "insert into users (username, email, firstname, " +
+                    "lastname, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);";
+            jdbcTemplate.update(insertPersonnel,
+                    personnel.getUsername(), personnel.getEmail(), personnel.getFirstname(),
+                    personnel.getLastname(), personnel.getPhone_no(), personnel.getPassword(), true);
+
+            String insertPersonnelAuthority = "insert into authorities (username, authority) values (?, ?);";
+            jdbcTemplate.update(insertPersonnelAuthority,
+                    personnel.getUsername(), personnelAuthority.getAuthority());
+        }
     }
 }

@@ -149,3 +149,18 @@ header {
     text-align: center;
     font-size: 0.8em;
 }
+
+.infoType {
+    display: inline-block;
+}
+.info {
+    display: inline-block;
+    padding-left: 5px   ;
+}
+.show-always {
+    display: inline-block !important;
+}
+
+#profile-submit {
+    display: none;
+}

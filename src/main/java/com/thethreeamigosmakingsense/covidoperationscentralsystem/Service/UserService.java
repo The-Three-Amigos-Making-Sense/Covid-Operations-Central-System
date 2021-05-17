@@ -2,6 +2,7 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Service;
 
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.UserRepository;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,34 @@ public class UserService {
         if (!checkValidCPR(user)) return false;
         if (!checkValidPhoneNo(user)) return false;
         if (!checkEmptyFields(user)) return false;
+        if (!checkEmptyPassword(user)) return false;
+        if (!checkValidEmail(user)) return false;
 
         return userRepository.saveNewUser(user);
+    }
+
+    public boolean updateUser(User user) {
+        if (!checkValidEmail(user)) return false;
+        if (!checkValidPhoneNo(user)) return false;
+        if (!checkEmptyFields(user)) return false;
+
+        return userRepository.updateUser(user);
     }
 
     private boolean checkEmptyFields(User user) {
         if (user.getEmail().isBlank())     return false;
         if (user.getFirstname().isBlank()) return false;
         if (user.getLastname().isBlank())  return false;
-        if (user.getPassword().isBlank())  return false;
         else                               return true;
+    }
+
+    private boolean checkEmptyPassword(User user) {
+        return user.getPassword().isBlank();
+    }
+
+    private boolean checkValidEmail(User user) {
+        EmailValidator validator = EmailValidator.getInstance();
+        return validator.isValid(user.getEmail());
     }
 
     private boolean checkValidPhoneNo(User user) {

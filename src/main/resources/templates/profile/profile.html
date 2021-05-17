@@ -5,15 +5,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile Information</title>
+
 </head>
 <body>
 <section layout:fragment="content">
-   <h1>Username: [[${username}]]</h1>
-   <h1>Email: [[${email}]]</h1>
-   <h1>Firstname: [[${firstname}]]</h1>
-   <h1>Lastname: [[${lastname}]]</h1>
-   <h1>Phone_no: [[${phone_no}]]</h1>
-    <button type="button">Edit Information</button>
+    <div class="login-form-wrapper">
+        <div class="login-form-title">
+            <h1 style="display: inline-block">Profile Information</h1>
+            <button style="display: inline-block" id="edit" value="Edit">Edit</button>
+        </div>
+        <form class="" th:action="@{/profile}" method="post">
+            <div class="infoType">CPR Number: </div>
+                <div class="show-always">[[${username}]]</div>
+        <br/>
+            <div class="infoType">Email: </div>
+                <div class="info">[[${email}]]</div>
+                <input name="email" class="infoInput" style="display: none" type="text" th:value="${email}"/>
+        <br/>
+            <div class="infoType">Firstname: </div>
+                <div class="info">[[${firstname}]]</div>
+                <input name="firstname" class="infoInput" style="display: none" type="text" th:value="${firstname}"/>
+        <br/>
+            <div class="infoType">Lastname: </div>
+                <div class="info">[[${lastname}]]</div>
+                <input name="lastname" class="infoInput" style="display: none" type="text" th:value="${lastname}"/>
+        <br/>
+            <div class="infoType">Phone Number: </div>
+                <div class="info">[[${phone_no}]]</div>
+                <input name="phone_no" class="infoInput" style="display: none" type="text" th:value="${phone_no}"/>
+        <br/>
+            <input id="profile-submit" type="submit" value="Save"/>
+        </form>
+    </div>
+    <script>
+        document.getElementById("edit").onclick = function edit() {
+            let info = document.getElementsByClassName("info");
+            let infoInput = document.getElementsByClassName("infoInput");
+            let edit = document.getElementById("edit");
+            let submit = document.getElementById("profile-submit");
+            edit.style.display = "none";
+            submit.style.display = "inline-block"
+
+            for (let i = 0; i < info.length; i++) {
+                info[i].style.display = "none";
+                infoInput[i].style.display = "inline-block";
+            }
+
+        }
+    </script>
 </section>
 </body>
 </html>

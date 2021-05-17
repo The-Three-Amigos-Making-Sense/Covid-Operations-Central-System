@@ -24,6 +24,7 @@ public class BookingController {
     @GetMapping("/test")
     public String test(Model model) {
 
+        model.addAttribute("navItem", "test");
         model.addAttribute("type", "covid-19 test");
         model.addAttribute("date", getCurrentDate());
         model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "TEST"));
@@ -36,6 +37,7 @@ public class BookingController {
     @PostMapping("/test")
     public String fetchTestAvailability(Model model, String date) {
 
+        model.addAttribute("navItem", "test");
         model.addAttribute("date", date);
         model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
 
@@ -45,6 +47,7 @@ public class BookingController {
     @GetMapping("/vaccine")
     public String vaccine(Model model) {
 
+        model.addAttribute("navItem", "vaccine");
         model.addAttribute("type", "covid-19 vaccine");
         model.addAttribute("date", getCurrentDate());
         model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "VACCINE"));
@@ -57,6 +60,7 @@ public class BookingController {
     @PostMapping("/vaccine")
     public String fetchVaccineAvailability(Model model, String date) {
 
+        model.addAttribute("navItem", "vaccine");
         model.addAttribute("date", date);
         model.addAttribute("times", bookingService.getAvailableTimes(date, "VACCINE"));
 
@@ -66,10 +70,14 @@ public class BookingController {
     @PostMapping("/booked")
     public String test(Model model, Booking booking) {
 
-        if (booking.getType().equals("TEST"))
+        if (booking.getType().equals("TEST")) {
+            model.addAttribute("navItem", "test");
             model.addAttribute("type", "covid-19 test");
-        else if (booking.getType().equals("VACCINE"))
+        }
+        else if (booking.getType().equals("VACCINE")) {
+            model.addAttribute("navItem", "vaccine");
             model.addAttribute("type", "covid-19 vaccine");
+        }
 
         if (bookingService.newBooking(booking)) {
             return "booking/success";

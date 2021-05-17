@@ -52,9 +52,20 @@ public class UserRepository {
             jdbcTemplate.update("insert into authorities values (?, ?);",
                     user.getUsername(), authority.getAuthority());
 
-        } catch (DuplicateKeyException e) {
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             return false;
+        }
+        return true;
+    }
+
+    public boolean updateUser(User user) {
+
+        try {
+            String sql = "UPDATE users SET email = ?, firstname = ?, lastname = ?, phone_no = ? " +
+                    "WHERE username = ?";
+            jdbcTemplate.update(sql,
+            user.getEmail(), user.getFirstname(), user.getLastname(), user.getPhone_no(), http.getRemoteUser());
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             return false;
