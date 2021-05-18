@@ -43,6 +43,20 @@
         </li>
 
     </ul>
+
+    <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_PERSONNEL')">
+        <li class="navbar-item navbar-first">
+            <form th:action="@{/searchuser}">
+                <input class="menu-button" type="submit" value="Search Users"/>
+            </form>
+        </li>
+        <li class="navbar-item">
+            <form th:action="@{/logout}" method="post">
+                <input class="menu-button" type="submit" value="Sign Out"/>
+            </form>
+        </li>
+    </ul>
+
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_ADMIN')">
         <li class="navbar-item navbar-first">
             <form th:action="@{/logout}" method="post">

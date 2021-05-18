@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<section layout:fragment="content">
+  <div class="login-form-wrapper">
+    <div class="login-form-title">SEARCH USERS</div>
+      <form action="" method="post">
+          <input type="text" name="searchword">
+      </form>
+      <table>
+          <thead>
+            <tr>
+                <th>CPR</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr>
+          </thead>>
+          <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.getUsername()}"></td>
+                <td th:text="${user.getFirstname()}"></td>
+                <td th:text="${user.getLastname()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td th:text="${user.getPhone_no()}"></td>
+            </tr>
+          </tbody>
+      </table>
+  </div>
+</section>
+
+</body>
+</html>

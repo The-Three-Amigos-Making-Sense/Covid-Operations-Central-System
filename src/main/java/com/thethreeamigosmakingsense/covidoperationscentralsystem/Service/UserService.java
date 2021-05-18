@@ -6,6 +6,8 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -29,6 +31,10 @@ public class UserService {
         if (!checkEmptyFields(user)) return false;
 
         return userRepository.updateUser(user);
+    }
+
+    public List<User> fetchAllUsersWithRole(String role) {
+        return userRepository.fetchAllUsersWithRole(role);
     }
 
     private boolean checkEmptyFields(User user) {

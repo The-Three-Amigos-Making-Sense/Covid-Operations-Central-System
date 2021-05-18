@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -37,7 +38,14 @@ public class UserRepository {
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         List<User> userList = jdbcTemplate.query(sql, rowMapper, remoteUser);
         return userList.get(0);
+    }
 
+    public List<User> fetchAllUsersWithRole(String role) {
+
+        String userSQL = "SELECT * FROM users LEFT JOIN authorities a on users.username = a.username " +
+                "WHERE a.authority = ?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return jdbcTemplate.query(userSQL, rowMapper, role);
     }
 
     public boolean saveNewUser(User user) {
