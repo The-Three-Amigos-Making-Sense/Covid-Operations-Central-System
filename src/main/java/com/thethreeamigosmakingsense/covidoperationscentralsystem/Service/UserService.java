@@ -37,6 +37,10 @@ public class UserService {
         return userRepository.fetchAllUsersWithRole(role);
     }
 
+    public List<User> searchAllUsers(String role, String searchTerm) {
+        return userRepository.searchAllUsersWithRole(role, searchTerm);
+    }
+
     private boolean checkEmptyFields(User user) {
         if (user.getEmail().isBlank())     return false;
         if (user.getFirstname().isBlank()) return false;

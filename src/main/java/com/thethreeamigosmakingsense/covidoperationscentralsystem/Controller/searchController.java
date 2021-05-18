@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -18,12 +19,19 @@ public class searchController {
     @GetMapping("/searchuser")
     public String search(Model model) {
 
-        List<User> userList = userService.fetchAllUsersWithRole("ROLE_USER");
-        for (User user : userList) {
-            System.out.println(user.getUsername());
-        }
-
+        model.addAttribute("navItem", "searchuser");
         model.addAttribute("users", userService.fetchAllUsersWithRole("ROLE_USER"));
+
+        return "search/search";
+    }
+
+    @PostMapping("/searchuser")
+    public String search(Model model, String searchTerm) {
+
+        model.addAttribute("searchTerm", searchTerm);
+
+        if (searchTerm.isBlank()) model.addAttribute("users", userService.fetchAllUsersWithRole("ROLE_USER"));
+        else model.addAttribute("users", userService.searchAllUsers("ROLE_USER", searchTerm));
 
         return "search/search";
     }

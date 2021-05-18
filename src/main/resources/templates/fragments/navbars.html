@@ -47,7 +47,7 @@
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_PERSONNEL')">
         <li class="navbar-item navbar-first">
             <form th:action="@{/searchuser}">
-                <input class="menu-button" type="submit" value="Search Users"/>
+                <input class="menu-button" th:classappend="${navItem == 'searchuser'}? 'menu-button-active'" type="submit" value="Search Users"/>
             </form>
         </li>
         <li class="navbar-item">

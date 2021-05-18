@@ -22,8 +22,8 @@ public class DatabaseConfig {
     @Bean
     public void initializeDatabase() {
 
-
-        String[] createTables = {
+        String query;
+        String[] queries = {
                 "CREATE TABLE IF NOT EXISTS Users (" +
                         "username   varchar(11) NOT NULL, " +
                         "email      varchar(320) NOT NULL UNIQUE, " +
@@ -38,7 +38,8 @@ public class DatabaseConfig {
                         "username  varchar(11) NOT NULL, " +
                         "authority varchar(14) NOT NULL, " +
                         "PRIMARY KEY (username), " +
-                        "CONSTRAINT Authorities FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",
+                        "CONSTRAINT Authorities FOREIGN KEY (username) " +
+                        "   REFERENCES Users (username) ON DELETE CASCADE);",
 
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
                         "booking_id int AUTO_INCREMENT, " +
@@ -47,25 +48,40 @@ public class DatabaseConfig {
                         "time       varchar(5) NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
-                        "CONSTRAINT Bookings FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE);",
+                        "CONSTRAINT Bookings FOREIGN KEY (username) " +
+                        "   REFERENCES Users (username) ON DELETE CASCADE);",
 
                 "CREATE TABLE IF NOT EXISTS TestResult (" +
                         "booking_id int(10) NOT NULL, " +
                         "status     varchar(14) NOT NULL, " +
                         "PRIMARY KEY (booking_id)," +
-                        "CONSTRAINT TestResult FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
+                        "CONSTRAINT TestResult FOREIGN KEY (booking_id) " +
+                        "   REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
 
                 "CREATE TABLE IF NOT EXISTS Vaccine (" +
                         "booking_id int(10) NOT NULL, " +
                         "type       varchar(11) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
-                        "CONSTRAINT Vaccine FOREIGN KEY (booking_id) REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
+                        "CONSTRAINT Vaccine FOREIGN KEY (booking_id) " +
+                        "   REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
 
-                "ALTER TABLE Bookings AUTO_INCREMENT = 1"
+                "ALTER TABLE Bookings AUTO_INCREMENT = 1",
         };
 
-        jdbcTemplate.batchUpdate(createTables);
+        jdbcTemplate.batchUpdate(queries);
 
+        // Checks if indexes exist and create them if they don't ('IF NOT EXIST' cannot be used on indexes)
+        query = "SELECT COUNT(1) FROM information_schema.STATISTICS " +
+                "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='users' " +
+                "AND INDEX_NAME = ?";
+        String index = "userIndex";
+        Integer indexes = jdbcTemplate.queryForObject(query, Integer.class, index);
+
+        if (indexes == null || indexes == 0) {
+
+            query = "CREATE FULLTEXT INDEX userIndex ON users(username, email, firstname, lastname, phone_no)";
+            jdbcTemplate.update(query);
+        }
 
         // Creates an Admin account if none exists
         String getNumberOfAdmins = "SELECT COUNT(*) FROM authorities WHERE authority = 'ROLE_ADMIN'";

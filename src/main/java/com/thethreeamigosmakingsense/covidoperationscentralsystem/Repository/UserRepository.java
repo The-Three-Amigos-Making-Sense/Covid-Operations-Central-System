@@ -5,7 +5,6 @@ import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -33,19 +31,31 @@ public class UserRepository {
 
         String remoteUser = http.getRemoteUser();
 
-        String sql = "SELECT username, email, firstname, lastname, " +
+        String query = "SELECT username, email, firstname, lastname, " +
                 "phone_no FROM users WHERE username = ?";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        List<User> userList = jdbcTemplate.query(sql, rowMapper, remoteUser);
+        List<User> userList = jdbcTemplate.query(query, rowMapper, remoteUser);
         return userList.get(0);
     }
 
     public List<User> fetchAllUsersWithRole(String role) {
 
-        String userSQL = "SELECT * FROM users LEFT JOIN authorities a on users.username = a.username " +
-                "WHERE a.authority = ?";
+        String query = "SELECT users.username, email, firstname, lastname, phone_no  FROM users " +
+                "LEFT JOIN authorities a on users.username = a.username " +
+                "WHERE a.authority = ?;";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        return jdbcTemplate.query(userSQL, rowMapper, role);
+        return jdbcTemplate.query(query, rowMapper, role);
+    }
+
+    public List<User> searchAllUsersWithRole(String role, String searchTerm) {
+
+        String query = "SELECT users.username, email, firstname, lastname, phone_no  FROM users " +
+                "LEFT JOIN authorities a on users.username = a.username " +
+                "WHERE a.authority = ? " +
+                "AND MATCH(users.username, email, firstname, lastname, phone_no) " +
+                "AGAINST(? IN NATURAL LANGUAGE MODE);";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return jdbcTemplate.query(query, rowMapper, role, searchTerm);
     }
 
     public boolean saveNewUser(User user) {
@@ -54,10 +64,13 @@ public class UserRepository {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try {
-            jdbcTemplate.update("insert into users values (?, ?, ?, ?, ?, ?, ?);",
+            String query = "insert into users values (?, ?, ?, ?, ?, ?, ?);";
+            jdbcTemplate.update(query,
                     user.getUsername(), user.getEmail(), user.getFirstname(),
                     user.getLastname(), user.getPhone_no(), user.getPassword(), true);
-            jdbcTemplate.update("insert into authorities values (?, ?);",
+
+            query = "insert into authorities values (?, ?);";
+            jdbcTemplate.update(query,
                     user.getUsername(), authority.getAuthority());
 
         } catch (DataIntegrityViolationException e) {
