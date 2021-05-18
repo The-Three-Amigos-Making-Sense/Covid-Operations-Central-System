@@ -1,6 +1,7 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Controller;
 
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
+import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.BookingRepository;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,5 +90,13 @@ public class BookingController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return localDate.format(formatter);
     }
+    @GetMapping("/myBookings")
+    public String getBookings(Model model){
 
+         model.addAttribute("navItem","myBookings");
+         model.addAttribute("bookings", bookingService.fetchUsersBookings(http.getRemoteUser()));
+
+            return "booking/checkBooking";
+
+    }
 }

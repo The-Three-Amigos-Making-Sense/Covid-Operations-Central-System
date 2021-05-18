@@ -125,4 +125,8 @@ public class BookingService {
 
         return times;
     }
+    public List<Booking> fetchUsersBookings(String username){
+
+        return bookingRepository.fetchUsersBookings(username);
+    }
 }

@@ -36,8 +36,8 @@
             </form>
         </li>
         <li class="navbar-item">
-        <form th:action="@{/profile}" method="get">
-            <input class="menu-button" th:classappend="${navItem == 'profile'}? 'menu-button-active'" type="submit" value="Check booking"/>
+        <form th:action="@{/myBookings}" method="get">
+            <input class="menu-button" th:classappend="${navItem == 'myBookings'}? 'menu-button-active'" type="submit" value="Check booking"/>
         </form>
         </li>
 
