@@ -35,6 +35,11 @@
                 <input class="menu-button" th:classappend="${navItem == 'profile'}? 'menu-button-active'" type="submit" value="Profile"/>
             </form>
         </li>
+        <li class="navbar-item">
+        <form th:action="@{/profile}" method="get">
+            <input class="menu-button" th:classappend="${navItem == 'profile'}? 'menu-button-active'" type="submit" value="Check booking"/>
+        </form>
+        </li>
 
         <li class="navbar-item">
             <form th:action="@{/logout}" method="post">
