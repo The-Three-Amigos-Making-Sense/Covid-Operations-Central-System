@@ -10,6 +10,7 @@
 ul { padding-inline-start: 0; }
 .d-flex { display: flex; }
 .w-100 { width: 100%; }
+.w-700px { width: 700px !important; }
 
 header {
     position: fixed;
@@ -54,9 +55,7 @@ header {
     color: #00a2e8;
     font-family: 'Lato', sans-serif;
 }
-.tr-300 {
 
-}
 .menu-button:hover {
     background-color: #ededed;
     cursor: pointer;

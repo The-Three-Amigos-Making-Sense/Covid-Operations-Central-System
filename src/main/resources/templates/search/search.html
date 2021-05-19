@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link th:href="@{/css/searchuser.css}"
+          rel="stylesheet" type="text/css" media="screen"/>
+</head>
+<body>
+<section layout:fragment="content">
+  <div class="login-form-wrapper w-700px">
+      <div class="login-form-title">
+          <h1>SEARCH USERS</h1>
+      </div>
+
+      <form class="login-form search-form" th:action="@{/searchuser}" method="post">
+          <input class="form-input search-input" type="text" name="searchTerm" th:value="${searchTerm}"
+          placeholder="Search users" autocomplete="off">
+          <input class="form-submit search-submit" type="submit" value="Search" name="search">
+          <input class="form-submit search-submit" type="submit" value="Reset" name="reset">
+      </form>
+      <table class="user-table">
+
+            <tr>
+                <th class="table-padding"></th>
+                <th>CPR</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr>
+
+            <tr class="data-tr" th:each="user : ${users}">
+                <td class="table-padding">
+                    <a th:href="'user?' + ${user.getUsername()}" >
+                        <span></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="'user?' + ${user.getUsername()}" >
+                        <span th:text="' ' + ${user.getUsername()}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="'user?' + ${user.getUsername()}">
+                        <span th:text="${user.getFirstname()}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="'user?' + ${user.getUsername()}">
+                        <span th:text="${user.getLastname()}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="'user?' + ${user.getUsername()}">
+                        <span th:text="${user.getEmail()}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="'user?' + ${user.getUsername()}">
+                        <span th:text="${user.getPhone_no()}"></span>
+                    </a>
+                </td>
+            </tr>
+
+      </table>
+
+  </div>
+</section>
+
+</body>
+</html>
