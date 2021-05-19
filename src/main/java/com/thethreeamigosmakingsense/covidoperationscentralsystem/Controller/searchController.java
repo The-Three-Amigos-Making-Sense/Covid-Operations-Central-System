@@ -25,14 +25,21 @@ public class searchController {
         return "search/search";
     }
 
-    @PostMapping("/searchuser")
+    @PostMapping(value = "/searchuser", params = "search")
     public String search(Model model, String searchTerm) {
 
         model.addAttribute("searchTerm", searchTerm);
 
-        if (searchTerm.isBlank()) model.addAttribute("users", userService.fetchAllUsersWithRole("ROLE_USER"));
+        if (searchTerm.isBlank())
+            model.addAttribute("users", userService.fetchAllUsersWithRole("ROLE_USER"));
         else model.addAttribute("users", userService.searchAllUsers("ROLE_USER", searchTerm));
 
         return "search/search";
+    }
+
+    @PostMapping(value = "/searchuser", params = "reset")
+    public String reset(Model model) {
+
+        return search(model);
     }
 }

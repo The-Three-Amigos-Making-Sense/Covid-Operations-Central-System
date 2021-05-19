@@ -16,19 +16,19 @@ public class UserService {
 
     public boolean signupUser(User user) {
 
-        if (!checkValidCPR(user)) return false;
-        if (!checkValidPhoneNo(user)) return false;
-        if (!checkEmptyFields(user)) return false;
-        if (!checkEmptyPassword(user)) return false;
-        if (!checkValidEmail(user)) return false;
+        if (hasInvValidCPR(user)) return false;
+        if (hasInvalidPhoneNo(user)) return false;
+        if (hasEmptyFields(user)) return false;
+        if (hasEmptyPassword(user)) return false;
+        if (hasInvalidEmail(user)) return false;
 
         return userRepository.saveNewUser(user);
     }
 
     public boolean updateUser(User user) {
-        if (!checkValidEmail(user)) return false;
-        if (!checkValidPhoneNo(user)) return false;
-        if (!checkEmptyFields(user)) return false;
+        if (!hasInvalidEmail(user)) return false;
+        if (!hasInvalidPhoneNo(user)) return false;
+        if (!hasEmptyFields(user)) return false;
 
         return userRepository.updateUser(user);
     }
@@ -41,33 +41,33 @@ public class UserService {
         return userRepository.searchAllUsersWithRole(role, searchTerm);
     }
 
-    private boolean checkEmptyFields(User user) {
-        if (user.getEmail().isBlank())     return false;
-        if (user.getFirstname().isBlank()) return false;
-        if (user.getLastname().isBlank())  return false;
-        else                               return true;
+    private boolean hasEmptyFields(User user) {
+        if (user.getEmail().isBlank())     return true;
+        if (user.getFirstname().isBlank()) return true;
+        if (user.getLastname().isBlank())  return true;
+        else                               return false;
     }
 
-    private boolean checkEmptyPassword(User user) {
+    private boolean hasEmptyPassword(User user) {
         return user.getPassword().isBlank();
     }
 
-    private boolean checkValidEmail(User user) {
+    public boolean hasInvalidEmail(User user) {
         EmailValidator validator = EmailValidator.getInstance();
-        return validator.isValid(user.getEmail());
+        return !validator.isValid(user.getEmail());
     }
 
-    private boolean checkValidPhoneNo(User user) {
+    private boolean hasInvalidPhoneNo(User user) {
 
         try {
             Integer.parseInt(user.getPhone_no());
         } catch (Exception e) {
-            return false;
+            return true;
         }
-        return user.getPhone_no().length() == 8;
+        return user.getPhone_no().length() != 8;
     }
 
-    private boolean checkValidCPR(User user) {
+    private boolean hasInvValidCPR(User user) {
 
         String cpr = user.getUsername();
 
@@ -75,11 +75,9 @@ public class UserService {
             Integer.parseInt(cpr.substring(0,6));
             Integer.parseInt(cpr.substring(7,11));
         } catch (Exception e) {
-            return false;
+            return true;
         }
 
-        if (cpr.charAt(6) != '-') return false;
-
-        return true;
+        return cpr.charAt(6) != '-';
     }
 }
