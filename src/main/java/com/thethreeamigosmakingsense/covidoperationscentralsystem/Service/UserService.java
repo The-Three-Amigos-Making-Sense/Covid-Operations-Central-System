@@ -41,6 +41,10 @@ public class UserService {
         return userRepository.searchAllUsersWithRole(role, searchTerm);
     }
 
+    public String checkPrivilege(String username) {
+        return userRepository.getAuthority(username);
+    }
+
     private boolean hasEmptyFields(User user) {
         if (user.getEmail().isBlank())     return true;
         if (user.getFirstname().isBlank()) return true;
@@ -77,7 +81,6 @@ public class UserService {
         } catch (Exception e) {
             return true;
         }
-
         return cpr.charAt(6) != '-';
     }
 }

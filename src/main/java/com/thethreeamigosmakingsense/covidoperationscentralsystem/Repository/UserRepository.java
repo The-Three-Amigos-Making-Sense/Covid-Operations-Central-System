@@ -93,4 +93,11 @@ public class UserRepository {
         }
         return true;
     }
+
+    public String getAuthority(String username) {
+        String query = "SELECT * FROM authorities WHERE username = ?";
+        RowMapper<Authority> rowMapper = new BeanPropertyRowMapper<>(Authority.class);
+        List<Authority> authList = jdbcTemplate.query(query, rowMapper, username);
+        return authList.get(0).getAuthority();
+    }
 }

@@ -5,6 +5,8 @@ public class Authority {
     private String username; // actually CPR
     private String authority;
 
+    public Authority() {}
+
     public Authority(User user, String authority) {
         username = user.getUsername();
         this.authority = authority;

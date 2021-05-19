@@ -1,23 +1,31 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Controller;
 
-import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class searchController {
+public class SearchController {
 
     @Autowired
     UserService userService;
 
+    @Autowired
+    HttpServletRequest http;
+
     @GetMapping("/searchuser")
     public String search(Model model) {
+
+        if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         model.addAttribute("navItem", "searchuser");
         model.addAttribute("users", userService.fetchAllUsersWithRole("ROLE_USER"));

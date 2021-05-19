@@ -51,7 +51,7 @@ public class BookingRepository {
                 jdbcTemplate.update("insert into TestResult values (?, ?);", keyHolder.getKey(), "TEST_PENDING");
 
             } else if (booking.getType().equals("vaccine")) {
-                jdbcTemplate.update("insert into authorities values (?, ?);", keyHolder.getKey()
+                jdbcTemplate.update("insert into vaccine values (?, ?);", keyHolder.getKey()
                         , "FIRST_SHOT");
             }
 
