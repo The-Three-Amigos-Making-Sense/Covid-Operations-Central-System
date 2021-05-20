@@ -26,11 +26,15 @@ public class UserService {
     }
 
     public boolean updateUser(User user) {
-        if (!hasInvalidEmail(user)) return false;
-        if (!hasInvalidPhoneNo(user)) return false;
-        if (!hasEmptyFields(user)) return false;
+        if (hasInvalidEmail(user)) return false;
+        if (hasInvalidPhoneNo(user)) return false;
+        if (hasEmptyFields(user)) return false;
 
         return userRepository.updateUser(user);
+    }
+
+    public User fetchRemoteUser() {
+        return userRepository.fetchRemoteUser();
     }
 
     public List<User> fetchAllUsersWithRole(String role) {

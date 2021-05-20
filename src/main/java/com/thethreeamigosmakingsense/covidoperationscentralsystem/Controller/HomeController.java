@@ -16,7 +16,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
 
-        User user = userRepository.fetchUser();
+        User user = userRepository.fetchRemoteUser();
         model.addAttribute("navItem", "home");
 
         model.addAttribute("firstname", user.getFirstname());

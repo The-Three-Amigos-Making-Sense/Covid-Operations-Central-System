@@ -34,24 +34,24 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="login-form-wrapper">
-        <div class="login-form-title">
-            <h1>Book a Covid-19 Test</h1>
+    <div class="content-wrapper w-400px">
+        <div class="content-title">
+            <h1>Book Covid-19 Test Time</h1>
         </div>
 
         <form hidden id="selectedDateForm" th:action="@{test}" method="post">
             <input readonly id="selectedDateInput" name="date" type="text">
         </form>
-        <form class="login-form" th:action="@{/booked}" method="post">
-            <input required type="text"
-                   name="date" id="datepicker" autocomplete="off" />
+        <form class="ta-center" th:action="@{/booked}" method="post">
+            <input required class="form-input w-125px ta-center fs-1-2em transparent-caret" type="text"
+                   name="date" id="datepicker" th:value="${date}" autocomplete="off" />
 
-            <select required name="time">
+            <select required class="form-select fs-1-2em" data-dropup-auto="false" name="time">
                 <option disabled selected value style="display: none">Select Time</option>
                 <option th:each="time : ${times}">[[${time}]]</option>
             </select>
             <input type="hidden" name="type" value="TEST">
-            <input class="form-submit" type="submit" value="Book Test">
+            <input class="form-submit w-250px" type="submit" value="Book Test">
         </form>
     </div>
 </section>

@@ -27,7 +27,7 @@ public class UserRepository {
     @Autowired
     private HttpServletRequest http;
 
-    public User fetchUser() {
+    public User fetchRemoteUser() {
 
         String remoteUser = http.getRemoteUser();
 

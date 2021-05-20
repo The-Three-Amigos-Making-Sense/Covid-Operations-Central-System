@@ -5,52 +5,76 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile Information</title>
-
+    <link th:href="@{/css/tables.css}"
+          rel="stylesheet" type="text/css" media="screen"/>
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="login-form-wrapper">
-        <div class="login-form-title">
-            <h1 style="display: inline-block">Profile Information</h1>
-            <button style="display: inline-block" id="edit" value="Edit">Edit</button>
+    <div class="content-wrapper w-700px">
+        <div class="content-title">
+            <h1>Profile Information</h1>
         </div>
         <form class="" th:action="@{/profile}" method="post">
-            <div class="infoType">CPR Number: </div>
-                <div class="show-always">[[${username}]]</div>
-        <br/>
-            <div class="infoType">Email: </div>
-                <div class="info">[[${email}]]</div>
-                <input name="email" class="infoInput" style="display: none" type="text" th:value="${email}"/>
-        <br/>
-            <div class="infoType">Firstname: </div>
-                <div class="info">[[${firstname}]]</div>
-                <input name="firstname" class="infoInput" style="display: none" type="text" th:value="${firstname}"/>
-        <br/>
-            <div class="infoType">Lastname: </div>
-                <div class="info">[[${lastname}]]</div>
-                <input name="lastname" class="infoInput" style="display: none" type="text" th:value="${lastname}"/>
-        <br/>
-            <div class="infoType">Phone Number: </div>
-                <div class="info">[[${phone_no}]]</div>
-                <input name="phone_no" class="infoInput" style="display: none" type="text" th:value="${phone_no}"/>
-        <br/>
-            <input id="profile-submit" type="submit" value="Save"/>
+            <table class="user-table w-100">
+                <tr>
+                    <th style="width: 110px">CPR</th>
+                    <th style="width: 130px">Firstname</th>
+                    <th style="width: 150px">Lastname</th>
+                    <th style="width: 190px">Email</th>
+                    <th style="width: 120px">Phone Number</th>
+                </tr>
+
+                <tr class="data-tr profile-tr">
+                    <td>
+                        <a>
+                            <span th:text="${user.getUsername()}"></span>
+                        </a>
+                    </td>
+                    <td class="profile-td profile-hover">
+                        <a>
+                            <span class="info" th:text="${user.getFirstname()}"></span>
+                            <input name="firstname" class="infoInput" style="display: none"
+                                   type="text" th:value="${user.getFirstname()}"/>
+                        </a>
+                    </td>
+                    <td class="profile-td profile-hover">
+                        <a>
+                            <span class="info" th:text="${user.getLastname()}"></span>
+                            <input name="lastname" class="infoInput" style="display: none"
+                                   type="text" th:value="${user.getLastname()}"/>
+                        </a>
+                    </td>
+                    <td class="profile-td profile-hover">
+                        <a>
+                            <span class="info" th:text="${user.getEmail()}"></span>
+                            <input name="email" class="infoInput" style="display: none"
+                                   type="text" th:value="${user.getEmail()}"/>
+                        </a>
+                    </td>
+                    <td class="profile-td profile-hover">
+                        <a>
+                            <span class="info" th:text="${user.getPhone_no()}"></span>
+                            <input name="phone_no" class="infoInput" style="display: none"
+                                   type="text" th:value="${user.getPhone_no()}"/>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <input hidden type="submit">
         </form>
     </div>
     <script>
-        document.getElementById("edit").onclick = function edit() {
-            let info = document.getElementsByClassName("info");
-            let infoInput = document.getElementsByClassName("infoInput");
-            let edit = document.getElementById("edit");
-            let submit = document.getElementById("profile-submit");
-            edit.style.display = "none";
-            submit.style.display = "inline-block"
+        let hover = document.getElementsByClassName("profile-td");
+        let info = document.getElementsByClassName("info");
+        let infoInput = document.getElementsByClassName("infoInput");
 
-            for (let i = 0; i < info.length; i++) {
+        for (let i = 0; i < info.length; i++) {
+            console.log(info[i].value)
+            info[i].onclick = function edit() {
                 info[i].style.display = "none";
-                infoInput[i].style.display = "inline-block";
+                infoInput[i].style.display = "table-cell";
+                hover[i].classList.remove("profile-hover");
             }
-
         }
     </script>
 </section>

@@ -8,12 +8,12 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="login-form-wrapper">
-        <div class="login-form-title">
+    <div class="content-wrapper w-400px">
+        <div class="content-title">
             <h1>Create New Account</h1>
         </div>
-        <form class="login-form" th:action="@{/signup}" method="post">
-            <input required class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+        <form class="cocs-form" th:action="@{/signup}" method="post">
+            <input required class="form-input w-100" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
                    type="text" name="username" placeholder="CPR (ddmmyy-xxxx)"/>
             <div class="login-alert-wrapper">
                 <div class="login-alert" th:if="${param.error}">
@@ -21,17 +21,17 @@
                     or CPR was not formatted using DDMMYY-XXXX
                 </div>
             </div>
-            <input required class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+            <input required class="form-input w-100" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
                    type="text" name="email" placeholder="Email Address"/>
-            <input required class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+            <input required class="form-input w-100" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
                    type="text" name="firstname" placeholder="Firstname"/>
-            <input required class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+            <input required class="form-input w-100" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
                    type="text" name="lastname" placeholder="Lastname"/>
-            <input required class="form-input" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
+            <input required class="form-input w-100" autocomplete="off" th:classappend="${param.error} ? 'form-input-error'"
                    type="text" name="phone_no" placeholder="Phone Number"/>
-            <input required class="form-input" type="password" name="password" placeholder="Password">
+            <input required class="form-input w-100" type="password" name="password" placeholder="Password">
 
-            <input class="form-submit" type="submit" value="Create Account">
+            <input class="form-submit w-100" type="submit" value="Create Account">
         </form>
     </div>
 </section>

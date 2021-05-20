@@ -7,23 +7,24 @@
 </head>
 <body>
 <section layout:fragment="content">
-  <div class="login-form-wrapper">
-    <div class="login-form-title">
+  <div class="content-wrapper w-400px">
+    <div class="content-title">
       <h1>Login</h1>
     </div>
-    <form class="login-form" th:action="@{/login}" method="post">
-      <input required class="form-input" th:classappend="${param.error} ? 'form-input-error'"
+    <form class="cocs-form" th:action="@{/login}" method="post">
+      <input required class="form-input w-100" th:classappend="${param.error} ? 'form-input-error'"
              type="text" name="username" placeholder="CPR Number" />
-      <input required class="form-input" th:classappend="${param.error} ? 'form-input-error'"
+      <input required class="form-input w-100" th:classappend="${param.error} ? 'form-input-error'"
              type="password" name="password" placeholder="Password"/>
       <div class="login-alert-wrapper">
         <div class="login-alert" th:if="${param.error}">Incorrect CPR or password</div>
         <div class="login-alert" th:if="${param.logout}">You have been logged out</div>
       </div>
-      <input class="form-submit" type="submit" value="Login"/>
-
+      <input class="form-submit w-100" type="submit" value="Login"/>
     </form>
-
+    <div class="w-100 ta-center m-top-5px">
+      <a th:href="@{/signup}">Create new account</a>
+    </div>
   </div>
 </section>
 </body>
