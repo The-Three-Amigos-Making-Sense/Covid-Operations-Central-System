@@ -89,5 +89,10 @@ public class BookingController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return localDate.format(formatter);
     }
+    @GetMapping("/checkBooking")
+    public String myBookings(Model model){
+        model.addAttribute("bookings", bookingService.fetchUsersBoookings(http.getRemoteUser()));
+      return "booking/checkBooking";
+    }
 
 }
