@@ -19,6 +19,10 @@ public class BookingService {
     @Autowired
     HttpServletRequest http;
 
+    public List<Booking> fetchUsersBoookings(String username) {
+        return bookingRepository.fetchUsersBookings(username);
+    }
+
     public boolean userHasActiveBooking(String username, String type) {
 
         List<Booking> bookingList = bookingRepository.fetchUsersBookings(username);
