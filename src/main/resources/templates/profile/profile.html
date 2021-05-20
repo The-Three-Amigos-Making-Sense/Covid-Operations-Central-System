@@ -55,24 +55,28 @@
                         <a>
                             <span class="info" th:text="${user.getPhone_no()}"></span>
                             <input name="phone_no" class="infoInput" style="display: none"
-                                   type="text" th:value="${user.getPhone_no()}"/>
+                                   type="number" th:value="${user.getPhone_no()}"/>
                         </a>
                     </td>
                 </tr>
             </table>
-            <input class="form-submit" type="submit" style="">
+            <div class="w-100 ta-center">
+                <input id="update-profile" class="form-submit w-100px" type="submit" style="display: none" value="Save">
+            </div>
         </form>
     </div>
     <script>
         let hover = document.getElementsByClassName("profile-td");
         let info = document.getElementsByClassName("info");
         let infoInput = document.getElementsByClassName("infoInput");
+        let updateProfile = document.getElementById("update-profile");
 
         for (let i = 0; i < info.length; i++) {
             console.log(info[i].value)
             info[i].onclick = function edit() {
                 info[i].style.display = "none";
                 infoInput[i].style.display = "table-cell";
+                updateProfile.style.display = "inline-block";
                 hover[i].classList.remove("profile-hover");
             }
         }

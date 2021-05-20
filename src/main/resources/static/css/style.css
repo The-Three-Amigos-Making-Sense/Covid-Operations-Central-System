@@ -12,10 +12,11 @@ ul { padding-inline-start: 0; }
 
 .w-50 { width: 50% }
 .w-100 { width: 100%; }
+.w-100px { width: 100px; }
 .w-125px { width: 125px; }
 .w-250px { width: 250px; }
 .w-400px { width: 400px; }
-.w-700px { width: 700px !important; }
+.w-700px { width: 700px; }
 
 .ta-left { text-align: left; }
 .ta-right { text-align: right;}
@@ -173,4 +174,14 @@ header {
 
 #profile-submit {
     display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Information</title>
+    <link th:href="@{/css/tables.css}"
+          rel="stylesheet" type="text/css" media="screen"/>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="content-wrapper w-700px">
+        <div class="content-title">
+            <h1 th:text="${}"></h1>
+        </div>
+        <table class="user-table w-100">
+            <tr>
+                <th style="width: 110px">CPR</th>
+                <th style="width: 130px">Firstname</th>
+                <th style="width: 150px">Lastname</th>
+                <th style="width: 190px">Email</th>
+                <th style="width: 120px">Phone Number</th>
+            </tr>
+
+            <tr class="data-tr profile-tr">
+                <td>
+                    <a>
+                        <span th:text="${user.getUsername()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${user.getFirstname()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${user.getLastname()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${user.getEmail()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${user.getPhone_no()}"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        let hover = document.getElementsByClassName("profile-td");
+        let info = document.getElementsByClassName("info");
+        let infoInput = document.getElementsByClassName("infoInput");
+        let updateProfile = document.getElementById("update-profile");
+
+        for (let i = 0; i < info.length; i++) {
+            console.log(info[i].value)
+            info[i].onclick = function edit() {
+                info[i].style.display = "none";
+                infoInput[i].style.display = "table-cell";
+                updateProfile.style.display = "inline-block";
+                hover[i].classList.remove("profile-hover");
+            }
+        }
+    </script>
+</section>
+</body>
+</html>
