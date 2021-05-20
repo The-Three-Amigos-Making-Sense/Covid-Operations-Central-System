@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class Booking {
 
+    private String booking_id;
     private String username;
     private String date;
     private String time;
@@ -12,11 +13,16 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String username, String date, String time, String type) {
+    public Booking(String booking_id, String username, String date, String time, String type) {
+        this.booking_id = booking_id;
         this.username = username;
         this.date = date;
         this.time = time;
         this.type = type;
+    }
+
+    public String getBooking_id() {
+        return booking_id;
     }
 
     public String getUsername() {

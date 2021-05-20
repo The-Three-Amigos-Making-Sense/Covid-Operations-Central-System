@@ -27,6 +27,15 @@ public class UserRepository {
     @Autowired
     private HttpServletRequest http;
 
+    public User fetchUser(String username) {
+
+        String query = "SELECT username, email, firstname, lastname, " +
+                "phone_no FROM users WHERE username = ?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        List<User> userList = jdbcTemplate.query(query, rowMapper, username);
+        return userList.get(0);
+    }
+
     public User fetchRemoteUser() {
 
         String remoteUser = http.getRemoteUser();

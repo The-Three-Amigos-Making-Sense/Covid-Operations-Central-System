@@ -33,6 +33,10 @@ public class UserService {
         return userRepository.updateUser(user);
     }
 
+    public User fetchUser(String username) {
+        return userRepository.fetchUser(username);
+    }
+
     public User fetchRemoteUser() {
         return userRepository.fetchRemoteUser();
     }

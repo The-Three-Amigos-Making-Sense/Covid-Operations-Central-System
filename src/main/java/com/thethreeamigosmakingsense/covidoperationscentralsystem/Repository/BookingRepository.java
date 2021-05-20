@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Repository;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.TreeMap;
 
 @Repository
 public class BookingRepository {
@@ -47,10 +50,10 @@ public class BookingRepository {
                     },
                     keyHolder);
 
-            if (booking.getType().equals("test")) {
+            if (booking.getType().equals("TEST")) {
                 jdbcTemplate.update("insert into TestResult values (?, ?);", keyHolder.getKey(), "TEST_PENDING");
 
-            } else if (booking.getType().equals("vaccine")) {
+            } else if (booking.getType().equals("VACCINE")) {
                 jdbcTemplate.update("insert into vaccine values (?, ?);", keyHolder.getKey()
                         , "FIRST_SHOT");
             }
@@ -79,5 +82,25 @@ public class BookingRepository {
         String sql = "SELECT * FROM bookings WHERE username = ?";
         RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
         return jdbcTemplate.query(sql, rowMapper, username);
+    }
+
+    public String fetchStatus(Booking booking) {
+
+        String type = booking.getType();
+        String sql;
+
+        if (type.equals("TEST")) {
+
+            sql = "SELECT status FROM testresult WHERE booking_id = ?";
+
+        } else {
+
+            sql = "SELECT type FROM vaccine WHERE booking_id = ?";
+        }
+
+        //RowMapper<String> rowMapper = new BeanPropertyRowMapper<>(String.class);
+        System.out.println(booking.getBooking_id());
+        return jdbcTemplate.queryForObject(sql, String.class, booking.getBooking_id());
+
     }
 }

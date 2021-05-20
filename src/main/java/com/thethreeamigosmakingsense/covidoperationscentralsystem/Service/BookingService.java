@@ -19,8 +19,15 @@ public class BookingService {
     @Autowired
     HttpServletRequest http;
 
-    public List<Booking> fetchUsersBoookings(String username) {
-        return bookingRepository.fetchUsersBookings(username);
+    public Map<Booking, String> fetchUsersBoookings(String username) {
+        Map<Booking, String> map = new TreeMap<>();
+
+        for (Booking booking : bookingRepository.fetchUsersBookings(username)) {
+            String status = bookingRepository.fetchStatus(booking);
+            map.put(booking, status);
+        }
+
+        return map;
     }
 
     public boolean userHasActiveBooking(String username, String type) {

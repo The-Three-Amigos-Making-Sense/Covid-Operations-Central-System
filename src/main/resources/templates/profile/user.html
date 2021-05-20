@@ -4,7 +4,7 @@
       layout:decorate="~{./fragments/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Profile Information</title>
+    <title>User</title>
     <link th:href="@{/css/tables.css}"
           rel="stylesheet" type="text/css" media="screen"/>
 </head>
@@ -12,7 +12,7 @@
 <section layout:fragment="content">
     <div class="content-wrapper w-700px">
         <div class="content-title">
-            <h1 th:text="${}"></h1>
+            <h1 th:text="${user.getUsername()}"></h1>
         </div>
         <table class="user-table w-100">
             <tr>
@@ -51,23 +51,38 @@
                 </td>
             </tr>
         </table>
-    </div>
-    <script>
-        let hover = document.getElementsByClassName("profile-td");
-        let info = document.getElementsByClassName("info");
-        let infoInput = document.getElementsByClassName("infoInput");
-        let updateProfile = document.getElementById("update-profile");
+        <table class="user-table w-100">
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Status</th>
+            </tr>
 
-        for (let i = 0; i < info.length; i++) {
-            console.log(info[i].value)
-            info[i].onclick = function edit() {
-                info[i].style.display = "none";
-                infoInput[i].style.display = "table-cell";
-                updateProfile.style.display = "inline-block";
-                hover[i].classList.remove("profile-hover");
-            }
-        }
-    </script>
+            <tr class="data-tr profile-tr" th:each="booking : ${bookings.entrySet()}">
+                <td>
+                    <a>
+                        <span th:text="${booking.getKey().getDate()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getKey().getTime()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getKey().getType()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getValue()}"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </section>
 </body>
 </html>
