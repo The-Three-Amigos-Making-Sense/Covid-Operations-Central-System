@@ -14,6 +14,10 @@
         <div class="content-title">
             <h1 th:text="${user.getUsername()}"></h1>
         </div>
+
+        <div class="ta-center m-top-50px">
+            <h2>USER INFO</h2>
+        </div>
         <table class="user-table w-100">
             <tr>
                 <th style="width: 110px">CPR</th>
@@ -51,33 +55,68 @@
                 </td>
             </tr>
         </table>
-        <table class="user-table w-100">
+
+        <table class="user-table w-100" th:if="${hasVaccineBooking}">
+
+            <div class="ta-center m-top-50px">
+                <h2>VACCINES</h2>
+            </div>
             <tr>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Type</th>
                 <th>Status</th>
             </tr>
-
-            <tr class="data-tr profile-tr" th:each="booking : ${bookings.entrySet()}">
+            <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
+                th:if="${booking.getFirst().getType()} == 'VACCINE'">
                 <td>
                     <a>
-                        <span th:text="${booking.getKey().getDate()}"></span>
+                        <span th:text="${booking.getFirst().getDate()}"></span>
                     </a>
                 </td>
                 <td class="profile-td">
                     <a>
-                        <span class="info" th:text="${booking.getKey().getTime()}"></span>
+                        <span class="info" th:text="${booking.getFirst().getTime()}"></span>
                     </a>
                 </td>
                 <td class="profile-td">
                     <a>
-                        <span class="info" th:text="${booking.getKey().getType()}"></span>
+                        <span class="info" th:text="${booking.getSecond().getType()}"></span>
                     </a>
                 </td>
                 <td class="profile-td">
                     <a>
-                        <span class="info" th:text="${booking.getValue()}"></span>
+                        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <table class="user-table w-100" th:if="${hasTestBooking}">
+            <div class="ta-center m-top-50px">
+                <h2>TESTS</h2>
+            </div>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+
+            <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
+                th:if="${booking.getFirst().getType()} == 'TEST'">
+                <td>
+                    <a>
+                        <span th:text="${booking.getFirst().getDate()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getFirst().getTime()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
                     </a>
                 </td>
             </tr>

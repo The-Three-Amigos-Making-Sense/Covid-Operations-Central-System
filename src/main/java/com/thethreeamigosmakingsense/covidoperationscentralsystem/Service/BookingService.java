@@ -1,7 +1,9 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Service;
 
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
+import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.BookingType;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.BookingRepository;
+import groovy.lang.Tuple2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +21,16 @@ public class BookingService {
     @Autowired
     HttpServletRequest http;
 
-    public Map<Booking, String> fetchUsersBoookings(String username) {
-        Map<Booking, String> map = new TreeMap<>();
+    public List<Tuple2<Booking, BookingType>> fetchUsersBoookings(String username) {
+
+        List<Tuple2<Booking, BookingType>> bookingList = new ArrayList<>();
 
         for (Booking booking : bookingRepository.fetchUsersBookings(username)) {
-            String status = bookingRepository.fetchStatus(booking);
-            map.put(booking, status);
+            BookingType type = bookingRepository.fetchStatus(booking);
+            bookingList.add(new Tuple2<>(booking, type));
         }
 
-        return map;
+        return bookingList;
     }
 
     public boolean userHasActiveBooking(String username, String type) {
@@ -58,7 +61,7 @@ public class BookingService {
         if (userHasActiveBooking(http.getRemoteUser(), booking.getType())) return false;
 
         // Checks if the user is attempting to book a time that is not at the 10 minute interval
-        if (Integer.parseInt(booking.getTime().substring(3)) % 10 != 0) return false;
+        if (Integer.parseInt(booking.getTime().substring(3,5)) % 10 != 0) return false;
 
         // Checks if the time has already been booked for that type of test
         for (Booking booked : bookingRepository.fetchAllBookings(booking.getType()))

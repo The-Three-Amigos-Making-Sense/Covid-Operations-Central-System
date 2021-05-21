@@ -31,27 +31,27 @@
             </tr>
             <tr class="data-tr browse-tr" th:each="user : ${users}">
                 <td>
-                    <a th:href="@{/user/__${user.getUsername()}__}" >
+                    <a th:href="@{/user/__${user.getUsername()}__}">
                         <span th:text="${user.getUsername()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a>
+                    <a th:href="@{/user/__${user.getUsername()}__}">
                         <span th:text="${user.getFirstname()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a>
+                    <a th:href="@{/user/__${user.getUsername()}__}">
                         <span th:text="${user.getLastname()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a>
+                    <a th:href="@{/user/__${user.getUsername()}__}">
                         <span th:text="${user.getEmail()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a>
+                    <a th:href="@{/user/__${user.getUsername()}__}">
                         <span th:text="${user.getPhone_no()}"></span>
                     </a>
                 </td>

@@ -70,6 +70,7 @@ public class BookingController {
     @PostMapping("/booked")
     public String test(Model model, Booking booking) {
 
+
         if (booking.getType().equals("TEST")) {
             model.addAttribute("navItem", "test");
             model.addAttribute("type", "covid-19 test");

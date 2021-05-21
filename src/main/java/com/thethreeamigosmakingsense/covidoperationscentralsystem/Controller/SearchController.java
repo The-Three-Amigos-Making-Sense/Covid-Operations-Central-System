@@ -23,9 +23,9 @@ public class SearchController {
     @GetMapping("/searchuser")
     public String search(Model model) {
 
-        if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER")) {
+        if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
+
 
         model.addAttribute("navItem", "searchuser");
         model.addAttribute("users", userService.fetchAllUsersWithRole("ROLE_USER"));
