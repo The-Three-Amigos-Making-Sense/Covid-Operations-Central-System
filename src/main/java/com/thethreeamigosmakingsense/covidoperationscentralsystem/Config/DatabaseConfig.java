@@ -3,14 +3,13 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Config;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Authority;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
+
 @Configuration
-@DependsOn("securityConfig")
 public class DatabaseConfig {
 
     @Autowired
@@ -19,7 +18,7 @@ public class DatabaseConfig {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Bean
+    @PostConstruct
     public void initializeDatabase() {
 
         String query;
@@ -44,7 +43,7 @@ public class DatabaseConfig {
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
                         "booking_id int AUTO_INCREMENT, " +
                         "username   varchar(11) NOT NULL, " +
-                        "`date`     varchar(10) NOT NULL, " +
+                        "`date`     timestamp NOT NULL, " +
                         "time       varchar(5) NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
@@ -61,6 +60,7 @@ public class DatabaseConfig {
                 "CREATE TABLE IF NOT EXISTS Vaccine (" +
                         "booking_id int(10) NOT NULL, " +
                         "type       varchar(11) NOT NULL, " +
+                        "status varchar(8) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
                         "CONSTRAINT Vaccine FOREIGN KEY (booking_id) " +
                         "   REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
@@ -84,8 +84,9 @@ public class DatabaseConfig {
         }
 
         // Creates an Admin account if none exists
-        String getNumberOfAdmins = "SELECT COUNT(*) FROM authorities WHERE authority = 'ROLE_ADMIN'";
-        Integer numberOfAdmins = jdbcTemplate.queryForObject(getNumberOfAdmins, Integer.class);
+        String getNumberOfAdmins = "SELECT COUNT(*) FROM authorities WHERE authority = ?";
+        Integer numberOfAdmins = jdbcTemplate.queryForObject(
+                getNumberOfAdmins, Integer.class, "ROLE_ADMIN");
 
         if (numberOfAdmins == null || numberOfAdmins == 0) {
             User admin = new User("Admin", "admin@cocs.com", "Admin",
@@ -106,15 +107,16 @@ public class DatabaseConfig {
         }
 
         // Creates a Personnel account if none exists
-        String getNumberOfPersonnel = "SELECT COUNT(*) FROM authorities WHERE authority = 'ROLE_PERSONNEL'";
-        Integer numberOfPersonnel = jdbcTemplate.queryForObject(getNumberOfPersonnel, Integer.class);
+        String getNumberOfPersonnel = "SELECT COUNT(*) FROM authorities WHERE authority = ?" ;
+        Integer numberOfPersonnel = jdbcTemplate.queryForObject(
+                getNumberOfPersonnel, Integer.class, "ROLE_PERSONNEL");
 
         if (numberOfPersonnel == null || numberOfPersonnel == 0) {
             User personnel = new User("Personnel", "personnel@cocs.com", "Test",
                     "Personnel", "87654321", "0000");
             personnel.setPassword(passwordEncoder.encode(personnel.getPassword()));
 
-            Authority personnelAuthority = new Authority(personnel, "ROLE_PERSONNEL");
+            Authority personnelAuthority = new Authority(personnel,"ROLE_PERSONNEL");
 
             String insertPersonnel = "insert into users (username, email, firstname, " +
                     "lastname, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);";

@@ -21,23 +21,23 @@ public class CustomErrorController implements ErrorController {
 
         switch (errorCode) {
             case 400 -> { // Http Error Code: 400. Bad Request
-                error = "Bad Request";
+                error = "400. Bad Request";
                 msg = "You have attempted to send bad data";
             }
             case 401 -> { // Http Error Code: 401. Unauthorized
-                error = "Unauthorized";
+                error = "401. Unauthorized";
                 msg = "You do not have permission to see this page";
             }
             case 404 -> { // Http Error Code: 404. Resource not found
-                error = "Resource not found";
+                error = "404. Resource not found";
                 msg = "This is not the page you're looking for";
             }
             case 418 -> { // Error Code: 418. I'm a teapot
-                error = "I'm a teapot";
+                error = "418. I'm a teapot";
                 msg = "Warning: I'm hot!";
             }
             case 500 -> { // Http Error Code: 500. Internal Server Error
-                error = "Internal Server Error";
+                error = "500. Internal Server Error";
                 msg = "Something went wrong. What did you do?";
             }
             default -> { //

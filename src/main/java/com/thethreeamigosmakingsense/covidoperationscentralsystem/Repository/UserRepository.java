@@ -27,6 +27,16 @@ public class UserRepository {
     @Autowired
     private HttpServletRequest http;
 
+    public User fetchUser(String username) {
+
+        String query = "SELECT username, email, firstname, lastname, " +
+                "phone_no FROM users WHERE username = ?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        List<User> userList = jdbcTemplate.query(query, rowMapper, username);
+        if (userList.size() != 1) return null;
+        return userList.get(0);
+    }
+
     public User fetchRemoteUser() {
 
         String remoteUser = http.getRemoteUser();
@@ -71,7 +81,7 @@ public class UserRepository {
 
             query = "insert into authorities values (?, ?);";
             jdbcTemplate.update(query,
-                    user.getUsername(), authority.getAuthority());
+                    user.getUsername(), authority.getAuthority().toString());
 
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();

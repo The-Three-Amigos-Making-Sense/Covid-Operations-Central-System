@@ -4,7 +4,7 @@
       layout:decorate="~{./fragments/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Profile Information</title>
+    <title>User</title>
     <link th:href="@{/css/tables.css}"
           rel="stylesheet" type="text/css" media="screen"/>
 </head>
@@ -12,7 +12,11 @@
 <section layout:fragment="content">
     <div class="content-wrapper w-700px">
         <div class="content-title">
-            <h1 th:text="${}"></h1>
+            <h1 th:text="${user.getUsername()}"></h1>
+        </div>
+
+        <div class="ta-center m-top-50px">
+            <h2>USER INFO</h2>
         </div>
         <table class="user-table w-100">
             <tr>
@@ -51,23 +55,73 @@
                 </td>
             </tr>
         </table>
-    </div>
-    <script>
-        let hover = document.getElementsByClassName("profile-td");
-        let info = document.getElementsByClassName("info");
-        let infoInput = document.getElementsByClassName("infoInput");
-        let updateProfile = document.getElementById("update-profile");
 
-        for (let i = 0; i < info.length; i++) {
-            console.log(info[i].value)
-            info[i].onclick = function edit() {
-                info[i].style.display = "none";
-                infoInput[i].style.display = "table-cell";
-                updateProfile.style.display = "inline-block";
-                hover[i].classList.remove("profile-hover");
-            }
-        }
-    </script>
+        <table class="user-table w-100" th:if="${hasVaccineBooking}">
+
+            <div class="ta-center m-top-50px">
+                <h2>VACCINES</h2>
+            </div>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Status</th>
+            </tr>
+            <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
+                th:if="${booking.getFirst().getType()} == 'VACCINE'">
+                <td>
+                    <a>
+                        <span th:text="${booking.getFirst().getDate()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getFirst().getTime()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getSecond().getType()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <table class="user-table w-100" th:if="${hasTestBooking}">
+            <div class="ta-center m-top-50px">
+                <h2>TESTS</h2>
+            </div>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+
+            <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
+                th:if="${booking.getFirst().getType()} == 'TEST'">
+                <td>
+                    <a>
+                        <span th:text="${booking.getFirst().getDate()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getFirst().getTime()}"></span>
+                    </a>
+                </td>
+                <td class="profile-td">
+                    <a>
+                        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </section>
 </body>
 </html>

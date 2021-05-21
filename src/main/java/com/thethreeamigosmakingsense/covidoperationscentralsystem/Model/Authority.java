@@ -1,5 +1,6 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 
+
 public class Authority {
 
     private String username; // actually CPR
