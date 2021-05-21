@@ -50,10 +50,10 @@
             </form>
         </li>
         <li class="navbar-item">
-        <form th:action="@{/checkBooking}" method="get">
+        <form th:action="@{/mybookings}" method="get">
             <input class="menu-button"
-                   th:classappend="${navItem == 'checkBooking'}? 'menu-button-active'"
-                   type="submit" value="Check booking"/>
+                   th:classappend="${navItem == 'mybookings'}? 'menu-button-active'"
+                   type="submit" value="My Bookings"/>
         </form>
         </li>
         <li class="navbar-item">

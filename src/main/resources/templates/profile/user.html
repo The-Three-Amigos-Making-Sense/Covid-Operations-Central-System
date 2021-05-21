@@ -56,71 +56,8 @@
             </tr>
         </table>
 
-        <table class="user-table w-100" th:if="${hasVaccineBooking}">
-
-            <div class="ta-center m-top-50px">
-                <h2>VACCINES</h2>
-            </div>
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Type</th>
-                <th>Status</th>
-            </tr>
-            <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
-                th:if="${booking.getFirst().getType()} == 'VACCINE'">
-                <td>
-                    <a>
-                        <span th:text="${booking.getFirst().getDate()}"></span>
-                    </a>
-                </td>
-                <td class="profile-td">
-                    <a>
-                        <span class="info" th:text="${booking.getFirst().getTime()}"></span>
-                    </a>
-                </td>
-                <td class="profile-td">
-                    <a>
-                        <span class="info" th:text="${booking.getSecond().getType()}"></span>
-                    </a>
-                </td>
-                <td class="profile-td">
-                    <a>
-                        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
-                    </a>
-                </td>
-            </tr>
-        </table>
-
-        <table class="user-table w-100" th:if="${hasTestBooking}">
-            <div class="ta-center m-top-50px">
-                <h2>TESTS</h2>
-            </div>
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-            </tr>
-
-            <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
-                th:if="${booking.getFirst().getType()} == 'TEST'">
-                <td>
-                    <a>
-                        <span th:text="${booking.getFirst().getDate()}"></span>
-                    </a>
-                </td>
-                <td class="profile-td">
-                    <a>
-                        <span class="info" th:text="${booking.getFirst().getTime()}"></span>
-                    </a>
-                </td>
-                <td class="profile-td">
-                    <a>
-                        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
-                    </a>
-                </td>
-            </tr>
-        </table>
+        <table th:replace="fragments/bookings :: usersVaccineBookings"></table>
+        <table th:replace="fragments/bookings :: usersTestBookings"></table>
     </div>
 </section>
 </body>

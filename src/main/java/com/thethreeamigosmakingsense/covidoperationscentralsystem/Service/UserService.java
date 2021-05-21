@@ -41,12 +41,12 @@ public class UserService {
         return userRepository.fetchRemoteUser();
     }
 
-    public List<User> fetchAllUsersWithRole(String role) {
-        return userRepository.fetchAllUsersWithRole(role);
+    public List<User> fetchAllUsers() {
+        return userRepository.fetchAllUsers();
     }
 
-    public List<User> searchAllUsers(String role, String searchTerm) {
-        return userRepository.searchAllUsersWithRole(role, searchTerm);
+    public List<User> searchAllUsers(String searchTerm) {
+        return userRepository.searchAllUsers(searchTerm);
     }
 
     public String checkPrivilege(String username) {

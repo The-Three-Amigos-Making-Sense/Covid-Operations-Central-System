@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>My Bookings</title>
+    <link th:href="@{/css/tables.css}"
+          rel="stylesheet" type="text/css" media="screen"/>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="content-wrapper w-700px">
+        <div class="content-title">
+             <h1>My Bookings</h1>
+        </div>
+        <div class="ta-center" th:if="${!hasTestBooking and !hasVaccineBooking}">
+            <h2>
+                You have no bookings
+            </h2>
+            <p>Book time for a <a th:href="@{/test}">covid-19 test</a> or <a th:href="@{/vaccine}">vaccine</a></p>
+        </div>
+
+        <table th:replace="fragments/bookings :: usersVaccineBookings"></table>
+        <table th:replace="fragments/bookings :: usersTestBookings"></table>
+
+
+    </div>
+</section>
+
+
+</body>
+</html>

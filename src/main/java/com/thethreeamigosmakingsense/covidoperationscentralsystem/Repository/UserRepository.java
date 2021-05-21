@@ -48,24 +48,20 @@ public class UserRepository {
         return userList.get(0);
     }
 
-    public List<User> fetchAllUsersWithRole(String role) {
+    public List<User> fetchAllUsers() {
 
-        String query = "SELECT users.username, email, firstname, lastname, phone_no  FROM users " +
-                "LEFT JOIN authorities a on users.username = a.username " +
-                "WHERE a.authority = ?;";
+        String query = "SELECT users.username, email, firstname, lastname, phone_no  FROM users";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        return jdbcTemplate.query(query, rowMapper, role);
+        return jdbcTemplate.query(query, rowMapper);
     }
 
-    public List<User> searchAllUsersWithRole(String role, String searchTerm) {
+    public List<User> searchAllUsers(String searchTerm) {
 
         String query = "SELECT users.username, email, firstname, lastname, phone_no  FROM users " +
-                "LEFT JOIN authorities a on users.username = a.username " +
-                "WHERE a.authority = ? " +
-                "AND MATCH(users.username, email, firstname, lastname, phone_no) " +
+                "WHERE MATCH(users.username, email, firstname, lastname, phone_no) " +
                 "AGAINST(? IN NATURAL LANGUAGE MODE);";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        return jdbcTemplate.query(query, rowMapper, role, searchTerm);
+        return jdbcTemplate.query(query, rowMapper, searchTerm);
     }
 
     public boolean saveNewUser(User user) {

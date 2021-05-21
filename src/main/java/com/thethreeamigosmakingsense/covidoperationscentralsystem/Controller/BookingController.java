@@ -22,7 +22,7 @@ public class BookingController {
     HttpServletRequest http;
 
     @GetMapping("/test")
-    public String test(Model model) {
+    private String test(Model model) {
 
         model.addAttribute("navItem", "test");
         model.addAttribute("type", "covid-19 test");
@@ -35,17 +35,19 @@ public class BookingController {
     }
 
     @PostMapping("/test")
-    public String fetchTestAvailability(Model model, String date) {
+    private String fetchTestAvailability(Model model, String date) {
 
         model.addAttribute("navItem", "test");
         model.addAttribute("date", date);
         model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
 
-        return "booking/test";
+        if (bookingService.userHasActiveBooking(http.getRemoteUser(), "TEST"))
+            return "booking/userHasBooking";
+        else return "booking/test";
     }
 
     @GetMapping("/vaccine")
-    public String vaccine(Model model) {
+    private String vaccine(Model model) {
 
         model.addAttribute("navItem", "vaccine");
         model.addAttribute("type", "covid-19 vaccine");
@@ -58,7 +60,7 @@ public class BookingController {
     }
 
     @PostMapping("/vaccine")
-    public String fetchVaccineAvailability(Model model, String date) {
+    private String fetchVaccineAvailability(Model model, String date) {
 
         model.addAttribute("navItem", "vaccine");
         model.addAttribute("date", date);
@@ -68,8 +70,7 @@ public class BookingController {
     }
 
     @PostMapping("/booked")
-    public String test(Model model, Booking booking) {
-
+    private String test(Model model, Booking booking) {
 
         if (booking.getType().equals("TEST")) {
             model.addAttribute("navItem", "test");
@@ -89,11 +90,6 @@ public class BookingController {
         LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return localDate.format(formatter);
-    }
-    @GetMapping("/checkBooking")
-    public String myBookings(Model model){
-        model.addAttribute("bookings", bookingService.fetchUsersBoookings(http.getRemoteUser()));
-      return "booking/checkBooking";
     }
 
 }

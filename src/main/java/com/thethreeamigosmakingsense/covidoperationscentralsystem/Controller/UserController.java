@@ -34,13 +34,40 @@ public class UserController {
 
         User user = userService.fetchUser(username);
         List<Tuple2<Booking, BookingType>> bookingList = bookingService.fetchUsersBoookings(username);
-        boolean hasTestBooking = false;
-        boolean hasVaccineBooking = false;
+        Tuple2<Boolean, Boolean> hasBookings = userHasBooking(bookingList);
 
         if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        model.addAttribute("hasTestBooking", hasBookings.getFirst());
+        model.addAttribute("hasVaccineBooking", hasBookings.getSecond());
+        model.addAttribute("user", user);
+        model.addAttribute("bookings", bookingList);
+
+        return "profile/user";
+    }
+
+    @GetMapping("/mybookings")
+    private String myBookings(Model model){
+
+        List<Tuple2<Booking, BookingType>> bookingList = bookingService.fetchUsersBoookings(http.getRemoteUser());
+        Tuple2<Boolean, Boolean> hasBookings = userHasBooking(bookingList);
+
+        model.addAttribute("navItem", "mybookings");
+        model.addAttribute("hasTestBooking", hasBookings.getFirst());
+        model.addAttribute("hasVaccineBooking", hasBookings.getSecond());
+        model.addAttribute("bookings", bookingList);
+
+        model.addAttribute("bookings", bookingService.fetchUsersBoookings(http.getRemoteUser()));
+        return "profile/myBookings";
+    }
+
+    private Tuple2<Boolean, Boolean> userHasBooking(List<Tuple2<Booking, BookingType>> bookingList) {
+
+        boolean hasTestBooking = false;
+        boolean hasVaccineBooking = false;
 
         for (Tuple2<Booking, BookingType> booking : bookingList ) {
             if (!hasTestBooking)
@@ -53,11 +80,6 @@ public class UserController {
                 break;
         }
 
-        model.addAttribute("hasTestBooking", hasTestBooking);
-        model.addAttribute("hasVaccineBooking", hasVaccineBooking);
-        model.addAttribute("user", user);
-        model.addAttribute("bookings", bookingList);
-
-        return "profile/user";
+        return new Tuple2<>(hasTestBooking, hasVaccineBooking);
     }
 }
