@@ -9,93 +9,30 @@
 
     <!-- ANONYMOUS -->
     <ul class="navbar-ul d-flex w-100" sec:authorize="isAnonymous()">
-        <li class="navbar-item  navbar-first">
-            <form th:action="@{/login}" method="get">
-                <input class="menu-button tr-300"
-                       th:classappend="${navItem == 'login'}? 'menu-button-active'"
-                       type="submit" value="Login"/>
-            </form>
-        </li>
-
-        <li class="navbar-item">
-            <form th:action="@{/signup}" method="get">
-                <input class="menu-button tr-300"
-                       th:classappend="${navItem == 'signup'}? 'menu-button-active'"
-                       type="submit" value="Register"/>
-            </form>
-        </li>
+        <li th:include="fragments/navItems :: navItemLogin" class="navbar-item navbar-first"></li>
+        <li th:include="fragments/navItems :: navItemSignup" class="navbar-item"></li>
     </ul>
 
     <!-- ROLE_USER -->
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_USER')">
-        <li class="navbar-item navbar-first">
-            <form th:action="@{/test}" method="get">
-                <input class="menu-button"
-                       th:classappend="${navItem == 'test'}? 'menu-button-active'"
-                       type="submit" value="Covid-Test"/>
-            </form>
-        </li>
-        <li class="navbar-item">
-            <form th:action="@{/vaccine}" method="get">
-                <input class="menu-button"
-                       th:classappend="${navItem == 'vaccine'}? 'menu-button-active'"
-                       type="submit" value="Covid-Vaccine"/>
-            </form>
-        </li>
-        <li class="navbar-item">
-            <form th:action="@{/profile}" method="get">
-                <input class="menu-button"
-                       th:classappend="${navItem == 'profile'}? 'menu-button-active'"
-                       type="submit" value="Profile"/>
-            </form>
-        </li>
-        <li class="navbar-item">
-        <form th:action="@{/mybookings}" method="get">
-            <input class="menu-button"
-                   th:classappend="${navItem == 'mybookings'}? 'menu-button-active'"
-                   type="submit" value="My Bookings"/>
-        </form>
-        </li>
-        <li class="navbar-item">
-            <form th:action="@{/logout}" method="post">
-                <input class="menu-button" type="submit" value="Sign Out"/>
-            </form>
-        </li>
+        <li th:include="fragments/navItems :: navItemTest" class="navbar-item navbar-first"></li>
+        <li th:include="fragments/navItems :: navItemVaccine" class="navbar-item"></li>
+        <li th:include="fragments/navItems :: navItemProfile" class="navbar-item"></li>
+        <li th:include="fragments/navItems :: navItemMybookings" class="navbar-item"></li>
+        <li th:include="fragments/navItems :: navItemLogout" class="navbar-item"></li>
     </ul>
 
     <!-- ROLE_PERSONNEL -->
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_PERSONNEL')">
-        <li class="navbar-item navbar-first">
-            <form th:action="@{/searchuser}">
-                <input class="menu-button" th:classappend="${navItem == 'searchuser'}? 'menu-button-active'" type="submit" value="Search Users"/>
-            </form>
-        </li>
-        <li class="navbar-item">
-            <form th:action="@{/profile}" method="get">
-                <input class="menu-button"
-                       th:classappend="${navItem == 'profile'}? 'menu-button-active'"
-                       type="submit" value="Profile"/>
-            </form>
-        </li>
-        <li class="navbar-item">
-            <form th:action="@{/logout}" method="post">
-                <input class="menu-button" type="submit" value="Sign Out"/>
-            </form>
-        </li>
+        <li th:include="fragments/navItems :: navItemSearchuser" class="navbar-item navbar-first"></li>
+        <li th:include="fragments/navItems :: navItemProfile" class="navbar-item"></li>
+        <li th:include="fragments/navItems :: navItemLogout" class="navbar-item"></li>
     </ul>
 
     <!-- ROLE_ADMIN -->
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_ADMIN')">
-        <li class="navbar-item navbar-first">
-            <form th:action="@{/logout}" method="post">
-                <input class="menu-button" type="submit" value="Sign Out"/>
-            </form>
-        </li>
-        <li class="navbar-item">
-            <form>
-                <input class="menu-button" type="submit" value="Only For Admins"/>
-            </form>
-        </li>
+        <li th:include="fragments/navItems :: navItemSearchuser" class="navbar-item navbar-first"></li>
+        <li th:include="fragments/navItems :: navItemLogout" class="navbar-item"></li>
     </ul>
 </div>
 </body>

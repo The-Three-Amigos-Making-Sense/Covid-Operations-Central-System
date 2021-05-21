@@ -77,7 +77,7 @@ public class UserRepository {
 
             query = "insert into authorities values (?, ?);";
             jdbcTemplate.update(query,
-                    user.getUsername(), authority.getAuthority().toString());
+                    user.getUsername(), authority.getAuthority());
 
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();

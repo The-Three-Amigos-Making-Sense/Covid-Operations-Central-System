@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- ANONYMOUS -->
+<ul>
+    <li th:fragment="navItemLogin">
+        <form th:action="@{/login}" method="get">
+            <input class="menu-button tr-300"
+                   th:classappend="${navItem == 'login'}? 'menu-button-active'"
+                   type="submit" value="Login"/>
+        </form>
+    </li>
+
+    <li th:fragment="navItemSignup">
+        <form th:action="@{/signup}" method="get">
+            <input class="menu-button tr-300"
+                   th:classappend="${navItem == 'signup'}? 'menu-button-active'"
+                   type="submit" value="Register"/>
+        </form>
+    </li>
+</ul>
+<!-- USERS -->
+<ul>
+    <li th:fragment="navItemTest">
+        <form th:action="@{/test}" method="get">
+            <input class="menu-button"
+                   th:classappend="${navItem == 'test'}? 'menu-button-active'"
+                   type="submit" value="Covid-Test"/>
+        </form>
+    </li>
+    <li th:fragment="navItemVaccine">
+        <form th:action="@{/vaccine}" method="get">
+            <input class="menu-button"
+                   th:classappend="${navItem == 'vaccine'}? 'menu-button-active'"
+                   type="submit" value="Covid-Vaccine"/>
+        </form>
+    </li>
+    <li th:fragment="navItemProfile">
+        <form th:action="@{/profile}" method="get">
+            <input class="menu-button"
+                   th:classappend="${navItem == 'profile'}? 'menu-button-active'"
+                   type="submit" value="Profile"/>
+        </form>
+    </li>
+    <li th:fragment="navItemMybookings">
+        <form th:action="@{/mybookings}" method="get">
+            <input class="menu-button"
+                   th:classappend="${navItem == 'mybookings'}? 'menu-button-active'"
+                   type="submit" value="My Bookings"/>
+        </form>
+    </li>
+    <li th:fragment="navItemLogout">
+        <form th:action="@{/logout}" method="post">
+            <input class="menu-button" type="submit" value="Sign Out"/>
+        </form>
+    </li>
+    <li th:fragment="navItemSearchuser">
+        <form th:action="@{/searchuser}">
+            <input class="menu-button" th:classappend="${navItem == 'searchuser'}? 'menu-button-active'" type="submit" value="Search Users"/>
+        </form>
+    </li>
+</ul>
+
+
+</body>
+</html>
