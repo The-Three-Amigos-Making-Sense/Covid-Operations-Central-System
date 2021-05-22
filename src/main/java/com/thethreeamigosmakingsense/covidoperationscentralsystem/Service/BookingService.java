@@ -3,7 +3,7 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Service;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.BookingType;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.BookingRepository;
-import groovy.lang.Tuple2;
+import groovy.lang.Tuple3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +21,39 @@ public class BookingService {
     @Autowired
     HttpServletRequest http;
 
-    public List<Tuple2<Booking, BookingType>> fetchUsersBoookings(String username) {
+    public Booking fetchBookingByID(int id) {
+        return bookingRepository.fetchBookingByID(id);
+    }
 
-        List<Tuple2<Booking, BookingType>> bookingList = new ArrayList<>();
+    public void updateStatus(BookingType bookingtype) {
+        bookingRepository.updateStatus(bookingtype);
+    }
+
+    /**
+     * Returns a List of Tuple3s with information relevant to a specific user's bookings
+     *
+     * @param username ID of user whose bookings are being fetched
+     * @return a Tuple3<Booking, BookingType, Boolean
+     */
+    public List<Tuple3<Booking, BookingType, Boolean>> fetchUsersBoookings(String username) {
+
+        List<Tuple3<Booking, BookingType, Boolean>> bookingList = new ArrayList<>();
 
         for (Booking booking : bookingRepository.fetchUsersBookings(username)) {
+
             BookingType type = bookingRepository.fetchStatus(booking);
-            bookingList.add(new Tuple2<>(booking, type));
+
+                boolean canBeCancelled =
+                    type.getStatus().equals("PENDING") ||
+                    type.getStatus().equals("TEST_PENDING");
+
+            bookingList.add(new Tuple3<>(booking, type, canBeCancelled));
         }
 
         return bookingList;
     }
 
-    public boolean userHasActiveBooking(String username, String type) {
+    public boolean userHasActiveBookingOfType(String username, String type) {
 
         List<Booking> bookingList = bookingRepository.fetchUsersBookings(username);
 
@@ -44,7 +64,8 @@ public class BookingService {
         for (Booking booking : bookingList) {
 
             if (booking.getLocalDateTime().isAfter(now) &&
-                    type.equals(booking.getType()))
+                    type.equals(booking.getType()) &&
+                    !bookingRepository.fetchStatus(booking).getStatus().equals("CANCELLED"))
                 return true;
         }
         return false;
@@ -58,14 +79,16 @@ public class BookingService {
     public boolean newBooking(Booking booking) {
 
         // Checks if the user already has an active booking of that type
-        if (userHasActiveBooking(http.getRemoteUser(), booking.getType())) return false;
+        if (userHasActiveBookingOfType(http.getRemoteUser(), booking.getType())) return false;
 
         // Checks if the user is attempting to book a time that is not at the 10 minute interval
         if (Integer.parseInt(booking.getTime().substring(3,5)) % 10 != 0) return false;
 
         // Checks if the time has already been booked for that type of test
-        for (Booking booked : bookingRepository.fetchAllBookings(booking.getType()))
+        for (Booking booked : bookingRepository.fetchAllBookingsByType(booking.getType())) {
+            if (bookingRepository.fetchStatus(booked).getStatus().equals("CANCELLED")) continue;
             if (booked.equals(booking)) return false;
+        }
 
         return bookingRepository.createBooking(booking);
     }
@@ -78,7 +101,7 @@ public class BookingService {
      */
     public List<String> getAvailableTimes(String date, String type) {
 
-        List<Booking> bookingsList = bookingRepository.fetchAllBookings(type);
+        List<Booking> bookingsList = bookingRepository.fetchAllBookingsByType(type);
 
         // Creates String of today's date and a concatenated integer of current hour and minute for later use.
         LocalDateTime now = LocalDateTime.now();
@@ -125,13 +148,13 @@ public class BookingService {
 
             time = sHour + ":" + sMinute;
 
-            // Skips the timeslot if is unavailable
+            // Skips the timeslot if is unavailable. Checks for cancelled times first.
             for (Booking booking : bookingsList) {
-                if (date.equals(booking.getDate())) {
-                    if (time.equals(booking.getTime())) {
+                if (bookingRepository.fetchStatus(booking).getStatus().equals("CANCELLED")) break;
+
+                if (date.equals(booking.getDate()))
+                    if (time.equals(booking.getTime()))
                         continue addTimes;
-                    }
-                }
             }
 
             times.add(time);

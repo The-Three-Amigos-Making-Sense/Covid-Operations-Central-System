@@ -29,7 +29,7 @@ public class BookingController {
         model.addAttribute("date", getCurrentDate());
         model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "TEST"));
 
-        if (bookingService.userHasActiveBooking(http.getRemoteUser(), "TEST"))
+        if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "TEST"))
             return "booking/userHasBooking";
         else return "booking/test";
     }
@@ -41,7 +41,7 @@ public class BookingController {
         model.addAttribute("date", date);
         model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
 
-        if (bookingService.userHasActiveBooking(http.getRemoteUser(), "TEST"))
+        if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "TEST"))
             return "booking/userHasBooking";
         else return "booking/test";
     }
@@ -54,7 +54,7 @@ public class BookingController {
         model.addAttribute("date", getCurrentDate());
         model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "VACCINE"));
 
-        if (bookingService.userHasActiveBooking(http.getRemoteUser(), "VACCINE"))
+        if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "VACCINE"))
             return "booking/userHasBooking";
         else return "booking/vaccine";
     }

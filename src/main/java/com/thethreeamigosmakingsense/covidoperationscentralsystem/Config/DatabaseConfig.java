@@ -60,7 +60,7 @@ public class DatabaseConfig {
                 "CREATE TABLE IF NOT EXISTS Vaccine (" +
                         "booking_id int(10) NOT NULL, " +
                         "type       varchar(11) NOT NULL, " +
-                        "status varchar(8) NOT NULL, " +
+                        "status varchar(9) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
                         "CONSTRAINT Vaccine FOREIGN KEY (booking_id) " +
                         "   REFERENCES Bookings (booking_id) ON DELETE CASCADE);",

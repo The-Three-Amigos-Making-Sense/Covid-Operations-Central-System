@@ -7,7 +7,11 @@
     background-color: aliceblue;
     font-family: 'Lato', sans-serif;
 }
+
 ul { padding-inline-start: 0; }
+
+.color-red { color: #ef2121; }
+
 .d-flex { display: flex; }
 
 .w-50 { width: 50% }
@@ -27,6 +31,8 @@ ul { padding-inline-start: 0; }
 
 .fs-0-8em { font-size: 0.8em; }
 .fs-1-2em { font-size: 1.2em; }
+
+.pad-right-15px { padding-right: 15px; }
 
 .transparent-caret { caret-color: transparent; }
 

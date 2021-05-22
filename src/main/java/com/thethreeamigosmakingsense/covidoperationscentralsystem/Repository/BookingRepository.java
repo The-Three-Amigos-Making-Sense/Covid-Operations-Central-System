@@ -6,12 +6,14 @@ import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.TestResu
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Vaccine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
@@ -67,11 +69,18 @@ public class BookingRepository {
         return true;
     }
 
-    public List<Booking> fetchAllBookings(String type) {
+    public List<Booking> fetchAllBookingsByType(String type) {
 
         String sql = "SELECT * FROM bookings WHERE type = ?";
         RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
         return jdbcTemplate.query(sql, rowMapper, type);
+    }
+
+    public Booking fetchBookingByID(int id) {
+
+        String sql = "SELECT * FROM bookings WHERE booking_id = ?";
+        RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     public List<Booking> fetchUsersBookings(String username) {
@@ -90,11 +99,29 @@ public class BookingRepository {
         if (type.equals("TEST")) {
             sql = "SELECT * FROM testresult WHERE booking_id = ?";
             RowMapper<TestResult> rowMapper = new BeanPropertyRowMapper<>(TestResult.class);
-            return jdbcTemplate.query(sql, rowMapper, booking.getBooking_id()).get(0);
+            return jdbcTemplate.queryForObject(sql, rowMapper, booking.getBooking_id());
         } else {
             sql = "SELECT * FROM vaccine WHERE booking_id = ?";
             RowMapper<Vaccine> rowMapper = new BeanPropertyRowMapper<>(Vaccine.class);
-            return jdbcTemplate.query(sql, rowMapper, booking.getBooking_id()).get(0);
+            return jdbcTemplate.queryForObject(sql, rowMapper, booking.getBooking_id());
         }
+    }
+
+    public void updateStatus(BookingType bookingType) {
+
+        String sql;
+
+        if (bookingType instanceof TestResult) {
+            sql = "UPDATE testresult SET status = ? WHERE booking_id = ?";
+            jdbcTemplate.update(sql, bookingType.getStatus(), bookingType.getBooking_id());
+            return;
+
+        } else if (bookingType instanceof Vaccine) {
+            sql = "UPDATE vaccine SET status = ? WHERE booking_id = ?";
+            jdbcTemplate.update(sql, bookingType.getStatus(), bookingType.getBooking_id());
+            return;
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 }
