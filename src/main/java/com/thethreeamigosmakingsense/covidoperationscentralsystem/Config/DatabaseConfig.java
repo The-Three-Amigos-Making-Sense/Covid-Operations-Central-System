@@ -43,7 +43,7 @@ public class DatabaseConfig {
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
                         "booking_id int AUTO_INCREMENT, " +
                         "username   varchar(11) NOT NULL, " +
-                        "`date`     timestamp NOT NULL, " +
+                        "`date`     varchar(10) NOT NULL, " +
                         "time       varchar(5) NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
