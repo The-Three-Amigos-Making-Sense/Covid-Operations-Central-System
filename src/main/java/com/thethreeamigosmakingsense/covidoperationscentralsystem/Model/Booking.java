@@ -48,7 +48,7 @@ public class Booking {
         int hour = Integer.parseInt(time.substring(0, 2));
         int minute = Integer.parseInt(time.substring(3));
 
-        return LocalDateTime.of(year, month, day, hour, minute, 0, 0);
+        return LocalDateTime.of(year, month, day, hour, minute);
     }
 
     public void setDate(String date) {

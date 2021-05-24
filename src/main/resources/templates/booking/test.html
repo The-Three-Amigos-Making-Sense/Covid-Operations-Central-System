@@ -39,7 +39,7 @@
             <h1>Book Covid-19 Test Time</h1>
         </div>
 
-        <form hidden id="selectedDateForm" th:action="@{test}" method="post">
+        <form hidden id="selectedDateForm" th:action="@{/test}" method="post">
             <input readonly id="selectedDateInput" name="date" type="text">
         </form>
         <form class="ta-center" th:action="@{/booked}" method="post">

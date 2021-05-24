@@ -10,7 +10,8 @@
 
 ul { padding-inline-start: 0; }
 
-.color-red { color: #ef2121; }
+.color-green { color: #00da00 !important; }
+.color-red { color: #ef2121 !important; }
 
 .d-flex { display: flex; }
 

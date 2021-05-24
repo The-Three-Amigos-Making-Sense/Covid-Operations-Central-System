@@ -2,12 +2,12 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
 </head>
 <body>
 
-<table th:fragment="usersVaccineBookings" class="user-table w-100" th:if="${hasVaccineBooking}">
+<table id="vaccineTable" th:fragment="usersVaccineBookings" class="user-table w-100" th:if="${hasVaccineBooking}">
 
   <div class="ta-center m-top-50px">
     <h2>VACCINES</h2>
@@ -17,7 +17,7 @@
     <th>Time</th>
     <th>Type</th>
     <th>Status</th>
-    <th class="ta-right" th:if="${canCancelVaccine}"></th>
+    <th class="ta-right w-125px"></th>
   </tr>
   <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
       th:if="${booking.getFirst().getType()} == 'VACCINE'">
@@ -38,23 +38,61 @@
     </td>
     <td class="profile-td">
       <a>
-        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
+        <form sec:authorize="hasRole('ROLE_PERSONNEL') or hasRole('ROLE_ADMIN')"
+              th:if=" ${navItem} != 'mybookings' and
+                      ${booking.getSecond().getStatus()} != 'CANCELLED' and
+                      ${booking.getSecond().getStatus()} != 'RECEIVED'"
+              th:action="@{/user/__${user.getUsername()}__}"
+              class="changeVaccineStatus"
+              method="post">
+          <input hidden readonly name="id" th:value="${booking.getFirst().getBooking_id()}"/>
+          <input hidden readonly name="type" th:value="${booking.getSecond().getType()}">
+          <select required name="updateVaccine">
+            <option disabled selected value style="display: none">
+              [[${booking.getSecond().getStatus()}]]
+            </option>
+            <option th:each="status : ${vaccineStatus}"
+                    th:if="${status} != ${booking.getSecond().getStatus()}">
+              [[${status}]]
+            </option>
+          </select>
+        </form>
+
+        <span th:if=" ${navItem} == 'mybookings' or
+                      ${booking.getSecond().getStatus()} == 'CANCELLED' or
+                      ${booking.getSecond().getStatus()} == 'RECEIVED'"
+              class="info" th:text="${booking.getSecond().getStatus()}"
+              th:classappend="
+                |${booking.getSecond().getStatus == 'CANCELLED' ? 'color-red' : ''}
+                ${booking.getSecond().getStatus == 'RECEIVED' ? 'color-green' : ''}|">
+
+        </span>
       </a>
     </td>
     <td class="ta-right pad-right-15px">
       <a>
-        <form th:if="${canCancelVaccine} and ${booking.getThird()}" th:action="@{/mybookings}" method="post">
+        <form th:if="${booking.getThird()}"
+              th:action="${navItem} == 'mybookings' ? @{/mybookings} : @{/user/__${user.getUsername()}__}"
+              method="post">
           <input hidden readonly name="id" th:value="${booking.getFirst().getBooking_id()}"/>
           <input hidden readonly name="type" th:value="${booking.getSecond().getType()}">
-          <input hidden readonly name="status" value="CANCELLED"/>
-          <input class="cancel-booking" type="submit" value="Cancel" name="cancelVaccine"/>
+          <input class="cancel-booking" type="submit" value="Cancel" name="updateVaccine"/>
         </form>
       </a>
     </td>
   </tr>
+  <script type="text/javascript">
+    let changeVaccineStatus = document.getElementsByClassName("changeVaccineStatus");
+
+    for (let i = 0; i < changeVaccineStatus.length; i++) {
+      changeVaccineStatus[i].addEventListener("change", function() {
+        changeVaccineStatus[i].submit();
+      })
+    }
+  </script>
 </table>
 
-<table th:fragment="usersTestBookings" class="user-table w-100"   th:if="${hasTestBooking}">
+<table th:fragment="usersTestBookings" class="user-table w-100" th:if="${hasTestBooking}">
   <div class="ta-center m-top-50px">
     <h2>TESTS</h2>
   </div>
@@ -62,7 +100,7 @@
     <th>Date</th>
     <th>Time</th>
     <th>Status</th>
-    <th class="ta-right" th:if="${canCancelTest}"></th>
+    <th class="ta-right"></th>
   </tr>
 
   <tr class="data-tr profile-tr" th:each="booking : ${bookings}"
@@ -79,19 +117,51 @@
     </td>
     <td class="profile-td">
       <a>
-        <span class="info" th:text="${booking.getSecond().getStatus()}"></span>
+        <form sec:authorize="hasRole('ROLE_PERSONNEL') or hasRole('ROLE_ADMIN')"
+              th:if=" ${navItem} != 'mybookings' and
+                      ${booking.getSecond().getStatus()} != 'CANCELLED'"
+              th:action="@{/user/__${user.getUsername()}__}"
+              class="changeTestStatus"
+              method="post">
+          <input hidden readonly name="id" th:value="${booking.getFirst().getBooking_id()}"/>
+          <select required name="updateTest">
+            <option disabled selected value style="display: none">
+              [[${booking.getSecond().getStatus()}]]
+            </option>
+            <option th:each="status : ${testStatus}"
+                    th:if="${status} != ${booking.getSecond().getStatus()}">
+              [[${status}]]
+            </option>
+          </select>
+        </form>
+        <span th:if=" ${navItem} == 'mybookings' or ${booking.getSecond().getStatus()} == 'CANCELLED'"
+              class="info" th:text="${booking.getSecond().getStatus()}"
+              th:classappend="
+                |${booking.getSecond().getStatus == 'CANCELLED' ? 'color-red' : ''}
+                 ${booking.getSecond().getStatus == 'POSITIVE' ? 'color-red' : ''}
+                 ${booking.getSecond().getStatus == 'NEGATIVE' ? 'color-green' : ''}|"></span>
       </a>
     </td>
     <td class="ta-right pad-right-15px">
       <a>
-        <form th:if="${canCancelTest} and ${booking.getThird()}" th:action="@{/mybookings}" method="post">
+        <form th:if="${booking.getThird()}"
+              th:action="${navItem} == 'mybookings' ? @{/mybookings} : @{/user/__${user.getUsername()}__}"
+              method="post">
           <input hidden readonly name="id" th:value="${booking.getFirst().getBooking_id()}"/>
-          <input hidden readonly name="status" value="CANCELLED"/>
-          <input class="cancel-booking" type="submit" value="Cancel" name="cancelTest"/>
+          <input class="cancel-booking" type="submit" value="Cancel" name="updateTest"/>
         </form>
       </a>
     </td>
   </tr>
+  <script type="text/javascript">
+    let changeTestStatus = document.getElementsByClassName("changeTestStatus");
+
+    for (let i = 0; i < changeTestStatus.length; i++) {
+      changeTestStatus[i].addEventListener("change", function() {
+        changeTestStatus[i].submit();
+      })
+    }
+  </script>
 </table>
 
 </body>

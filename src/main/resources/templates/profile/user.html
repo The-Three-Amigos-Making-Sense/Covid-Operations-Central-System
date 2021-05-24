@@ -12,7 +12,7 @@
 <section layout:fragment="content">
     <div class="content-wrapper w-700px">
         <div class="content-title">
-            <h1 th:text="${user.getUsername()}"></h1>
+            <h1 th:text="|${user.getFirstname()} ${user.getLastname()}|"></h1>
         </div>
 
         <div class="ta-center m-top-50px">

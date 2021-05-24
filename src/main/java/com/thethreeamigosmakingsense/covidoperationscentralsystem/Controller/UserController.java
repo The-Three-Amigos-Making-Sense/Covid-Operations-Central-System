@@ -30,29 +30,55 @@ public class UserController {
     @GetMapping(value = "/user/{username}")
     public String readUserInfo(@PathVariable("username") String username, Model model) {
 
+        if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
         User user = userService.fetchUser(username);
         List<Tuple3<Booking, BookingType, Boolean>> bookingList = bookingService.fetchUsersBoookings(username);
         Tuple2<Boolean, Boolean> hasBookings = userHasBooking(bookingList);
 
-        boolean canCancelTest = canCancel(bookingList, "TEST");
-        boolean canCancelVaccine = canCancel(bookingList, "VACCINE");
-
-        if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-
         if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
+        String[] vaccineStatus = {"PENDING", "RECEIVED"};
+        String[] testStatus = {"TEST_PENDING", "RESULT_PENDING", "NEGATIVE", "POSITIVE"};
+
+        model.addAttribute("vaccineStatus", vaccineStatus);
+        model.addAttribute("testStatus", testStatus);
         model.addAttribute("hasTestBooking", hasBookings.getFirst());
         model.addAttribute("hasVaccineBooking", hasBookings.getSecond());
-        model.addAttribute("canCancelTest", canCancelTest);
-        model.addAttribute("canCancelVaccine", canCancelVaccine);
         model.addAttribute("user", user);
         model.addAttribute("bookings", bookingList);
 
         return "profile/user";
     }
 
-    @GetMapping("/mybookings")
+    @PostMapping(value = "/user/{username}", params = "updateTest")
+    private String readUserInfo(@PathVariable("username") String username, Model model, String id,
+            @RequestParam(value = "updateTest") String status) {
+
+        if (status.equalsIgnoreCase("cancel")) status = "CANCELLED";
+
+        TestResult testResult = new TestResult(Integer.parseInt(id), status);
+
+        bookingService.updateStatus(testResult);
+
+        return readUserInfo(username, model);
+    }
+
+    @PostMapping(value = "/user/{username}", params = {"updateVaccine"})
+    private String readUserInfo(@PathVariable("username") String username, Model model, String id,
+             @RequestParam(value = "updateVaccine") String status, String type) {
+
+        if (status.equalsIgnoreCase("cancel")) status = "CANCELLED";
+
+        Vaccine vaccine = new Vaccine(Integer.parseInt(id), status, type);
+
+        bookingService.updateStatus(vaccine);
+
+        return readUserInfo(username, model);
+    }
+
+    @GetMapping(value = "/mybookings")
     private String myBookings(Model model){
 
         List<Tuple3<Booking, BookingType, Boolean>> bookingList =
@@ -62,21 +88,19 @@ public class UserController {
 
         Tuple2<Boolean, Boolean> hasBookings = userHasBooking(bookingList);
 
-        boolean canCancelTest = canCancel(bookingList, "TEST");
-        boolean canCancelVaccine = canCancel(bookingList, "VACCINE");
-
         model.addAttribute("navItem", "mybookings");
-        model.addAttribute("validate", true);
-        model.addAttribute("hasTestBooking", hasBookings.getFirst());
-        model.addAttribute("hasVaccineBooking", hasBookings.getSecond());
-        model.addAttribute("canCancelTest", canCancelTest);
-        model.addAttribute("canCancelVaccine", canCancelVaccine);
+        model.addAttribute("hasTestBooking", hasBookings.getFirst());     // if false the table is never rendered
+        model.addAttribute("hasVaccineBooking", hasBookings.getSecond()); // if false the table is never rendered
         model.addAttribute("bookings", bookingList);
+        model.addAttribute("user", new User()); // is never used, prevents page fragment from throwing error
         return "profile/myBookings";
     }
 
-    @PostMapping(value = "/mybookings", params = "cancelTest")
-    private String myBookings(Model model, String id, String status) {
+    @PostMapping(value = "/mybookings", params = "updateTest")
+    private String myBookings(Model model, String id,
+                              @RequestParam(value = "updateTest") String status) {
+
+        if (status.equalsIgnoreCase("cancel")) status = "CANCELLED";
 
         TestResult testResult = new TestResult(Integer.parseInt(id), status);
 
@@ -85,8 +109,11 @@ public class UserController {
         return myBookings(model);
     }
 
-    @PostMapping(value = "/mybookings", params = "cancelVaccine")
-    private String myBookings(Model model, String id, String status, String type) {
+    @PostMapping(value = "/mybookings", params = "updateVaccine")
+    private String myBookings(Model model, String id,
+                              @RequestParam(value = "updateVaccine") String status, String type) {
+
+        if (status.equalsIgnoreCase("cancel")) status = "CANCELLED";
 
         Vaccine vaccine = new Vaccine(Integer.parseInt(id), status, type);
 
@@ -125,14 +152,5 @@ public class UserController {
 
     private void filterBookings(List<Tuple3<Booking, BookingType, Boolean>> bookingList) {
         bookingList.removeIf(booking -> booking.getSecond().getStatus().equals("CANCELLED"));
-    }
-
-    private boolean canCancel(List<Tuple3<Booking, BookingType, Boolean>> bookingList, String type) {
-
-        for (Tuple3<Booking, BookingType, Boolean> booking : bookingList)
-            if (booking.getFirst().getType().equals(type))
-                if (booking.getThird()) return true;
-
-        return false;
     }
 }
