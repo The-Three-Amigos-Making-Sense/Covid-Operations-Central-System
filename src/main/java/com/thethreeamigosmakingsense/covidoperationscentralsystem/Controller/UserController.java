@@ -39,8 +39,8 @@ public class UserController {
 
         if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        String[] vaccineStatus = {"PENDING", "RECEIVED"};
-        String[] testStatus = {"TEST_PENDING", "RESULT_PENDING", "NEGATIVE", "POSITIVE"};
+        String[] vaccineStatus = {"PENDING", "RECEIVED", "CANCELLED"};
+        String[] testStatus = {"TEST_PENDING", "RESULT_PENDING", "NEGATIVE", "POSITIVE", "CANCELLED"};
 
         model.addAttribute("vaccineStatus", vaccineStatus);
         model.addAttribute("testStatus", testStatus);
@@ -74,6 +74,10 @@ public class UserController {
         Vaccine vaccine = new Vaccine(Integer.parseInt(id), status, type);
 
         bookingService.updateStatus(vaccine);
+
+        if (vaccine.getType().equals("FIRST_SHOT") && vaccine.getStatus().equals("RECEIVED")) {
+            bookingService.autoBookSecondShot(username, vaccine);
+        }
 
         return readUserInfo(username, model);
     }

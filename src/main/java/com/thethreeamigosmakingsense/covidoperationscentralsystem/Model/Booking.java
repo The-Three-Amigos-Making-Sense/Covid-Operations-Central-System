@@ -51,6 +51,30 @@ public class Booking {
         return LocalDateTime.of(year, month, day, hour, minute);
     }
 
+    public void setDateTime(LocalDateTime ldt) {
+
+        String day;
+        if (ldt.getDayOfMonth() < 10) day = "0" + ldt.getDayOfMonth();
+        else day = String.valueOf(ldt.getDayOfMonth());
+
+        String month;
+        if (ldt.getMonthValue() < 10) month = "0" + ldt.getMonthValue();
+        else month = String.valueOf(ldt.getMonthValue());
+
+        String year = String.valueOf(ldt.getYear());
+
+        String hour;
+        if (ldt.getHour() < 10) hour = "0" + ldt.getHour();
+        else hour = String.valueOf(ldt.getHour());
+
+        String minute;
+        if (ldt.getMinute() < 10) minute = "0" + ldt.getMinute();
+        else minute = String.valueOf(ldt.getMinute());
+
+        date = day + "-" + month + "-" + year;
+        time = hour + ":" + minute;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }

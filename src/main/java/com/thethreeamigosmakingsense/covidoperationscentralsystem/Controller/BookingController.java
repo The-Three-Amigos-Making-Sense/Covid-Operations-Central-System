@@ -72,18 +72,22 @@ public class BookingController {
     @PostMapping("/booked")
     private String test(Model model, Booking booking) {
 
+        String type = "";
+
         if (booking.getType().equals("TEST")) {
             model.addAttribute("navItem", "test");
             model.addAttribute("type", "covid-19 test");
+            type = "test";
         }
         else if (booking.getType().equals("VACCINE")) {
             model.addAttribute("navItem", "vaccine");
             model.addAttribute("type", "covid-19 vaccine");
+            type = "vaccine";
         }
 
         if (bookingService.newBooking(booking)) {
             return "booking/success";
-        } else return "redirect:/test?error";
+        } else return "redirect:/" + type + "?error";
     }
 
     private String getCurrentDate() {

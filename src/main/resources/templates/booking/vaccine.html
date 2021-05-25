@@ -53,7 +53,22 @@
             <input type="hidden" name="type" value="VACCINE">
             <input class="form-submit w-250px" type="submit" value="Book Vaccine">
         </form>
+        <hr>
+        <div class="ta-center fs-0-9em pad-sides-5px">
+            <p>
+                Here you can book time to get the vaccine
+            </p>
+            <p>
+                If you are trying to book a time to receive the second shot of the vaccine,
+                please keep in mind that you cannot book a time that is earlier than 24 days
+                from your first shot
+            </p>
+            <p th:if="${param.error}" class="color-red">
+                Something went wrong. Please try again.
+            </p>
+        </div>
     </div>
+
 </section>
 
 </body>

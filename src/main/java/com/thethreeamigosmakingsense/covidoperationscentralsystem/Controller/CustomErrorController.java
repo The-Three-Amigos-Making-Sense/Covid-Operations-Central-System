@@ -36,6 +36,10 @@ public class CustomErrorController implements ErrorController {
                 error = "418. I'm a teapot";
                 msg = "Warning: I'm hot!";
             }
+            case 425 -> { // Error Code: 425. Too early
+                error = "425. Too early";
+                msg = "You have attempted to book your second vaccine earlier than 24 days from your first shot";
+            }
             case 500 -> { // Http Error Code: 500. Internal Server Error
                 error = "500. Internal Server Error";
                 msg = "Something went wrong. What did you do?";

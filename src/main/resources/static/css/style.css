@@ -31,8 +31,10 @@ ul { padding-inline-start: 0; }
 .m-top-50px { margin-top: 50px; }
 
 .fs-0-8em { font-size: 0.8em; }
+.fs-0-9em { font-size: 0.9em; }
 .fs-1-2em { font-size: 1.2em; }
 
+.pad-sides-5px { padding: 0 5px; }
 .pad-right-15px { padding-right: 15px; }
 
 .transparent-caret { caret-color: transparent; }

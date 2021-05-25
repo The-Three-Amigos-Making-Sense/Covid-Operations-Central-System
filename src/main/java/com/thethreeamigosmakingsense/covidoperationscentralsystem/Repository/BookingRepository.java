@@ -32,7 +32,7 @@ public class BookingRepository {
     @Autowired
     HttpServletRequest http;
 
-    public boolean createBooking(Booking booking) {
+    public boolean createBooking(Booking booking, BookingType bookingType) {
 
         String sql;
 
@@ -53,13 +53,15 @@ public class BookingRepository {
                     },
                     keyHolder);
 
-            if (booking.getType().equals("TEST")) {
+            if (bookingType instanceof TestResult) {
                 sql = "insert into TestResult values (?, ?);";
-                jdbcTemplate.update(sql, keyHolder.getKey(), "TEST_PENDING");
+                jdbcTemplate.update(sql,
+                        keyHolder.getKey(), bookingType.getStatus());
 
-            } else if (booking.getType().equals("VACCINE")) {
+            } else if (bookingType instanceof Vaccine) {
                 sql = "insert into vaccine values (?, ?, ?);";
-                jdbcTemplate.update(sql, keyHolder.getKey(), "FIRST_SHOT", "PENDING");
+                jdbcTemplate.update(sql,
+                        keyHolder.getKey(), ((Vaccine)bookingType).getType(), bookingType.getStatus());
             }
 
         } catch (DataIntegrityViolationException e) {
@@ -105,6 +107,16 @@ public class BookingRepository {
             RowMapper<Vaccine> rowMapper = new BeanPropertyRowMapper<>(Vaccine.class);
             return jdbcTemplate.queryForObject(sql, rowMapper, booking.getBooking_id());
         }
+    }
+
+    public boolean isAvailable(Booking booking) {
+
+        String sql = "SELECT * FROM bookings WHERE date = ? and time = ? and type = ?";
+        RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
+        List<Booking> bookingList =
+                jdbcTemplate.query(sql, rowMapper, booking.getDate(), booking.getTime(), booking.getType());
+
+        return bookingList.size() == 0;
     }
 
     public void updateStatus(BookingType bookingType) {

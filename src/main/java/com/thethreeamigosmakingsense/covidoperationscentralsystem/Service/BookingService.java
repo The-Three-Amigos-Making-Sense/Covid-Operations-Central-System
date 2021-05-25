@@ -2,14 +2,18 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Service;
 
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.BookingType;
+import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.TestResult;
+import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Vaccine;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.BookingRepository;
+import groovy.lang.Tuple2;
 import groovy.lang.Tuple3;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -95,7 +99,62 @@ public class BookingService {
             if (booked.equals(booking)) return false;
         }
 
-        return bookingRepository.createBooking(booking);
+        // Creates a BookingType object with desired the properties.
+        BookingType bookingType;
+        switch (booking.getType()) {
+            case "TEST" -> bookingType = new TestResult(booking.getBooking_id(), "TEST_PENDING");
+            case "VACCINE" -> {
+                String type = "FIRST_SHOT";
+
+                // Checks if user already has received first shot
+                for (Tuple3<Booking, BookingType, Boolean> bookings : fetchUsersBoookings(http.getRemoteUser())) {
+                    if (bookings.getSecond() instanceof Vaccine) {
+                        if (((Vaccine) bookings.getSecond()).getType().equals("FIRST_SHOT") &&
+                                bookings.getSecond().getStatus().equals("RECEIVED")) {
+
+                            if (booking.getLocalDateTime().isBefore(bookings.getFirst().getLocalDateTime().plusDays(24))) {
+                                return false;
+                            }
+                            type = "SECOND_SHOT";
+                            break;
+                        }
+                    }
+                }
+                bookingType = new Vaccine(booking.getBooking_id(), "PENDING", type);
+            }
+
+            default -> { return false; }
+        }
+
+        return bookingRepository.createBooking(booking, bookingType);
+    }
+
+    public void autoBookSecondShot(String username, Vaccine firstVaccine) {
+
+        // Creates objects needed for booking the second shot. The booking will be set 24 days after the first shot
+        Booking firstBooking = fetchBookingByID(firstVaccine.getBooking_id());
+        Booking secondBooking = new Booking();
+        BookingType secondVaccine = new Vaccine(null, "PENDING", "SECOND_SHOT");
+        secondBooking.setUsername(username);
+        secondBooking.setType("VACCINE");
+        secondBooking.setDateTime(firstBooking.getLocalDateTime().plusDays(24));
+
+        List<Booking> bookingList = bookingRepository.fetchAllBookingsByType("VACCINE");
+
+        // Increments the booking time by 10 minutes if the time currently set is already booked
+        doWhile:
+        do {
+            for (Booking booking : bookingList) {
+                if (booking.getLocalDateTime().isEqual(
+                        secondBooking.getLocalDateTime())) {
+                    secondBooking.setDateTime(incrementDateTime(secondBooking.getLocalDateTime()));
+                    continue doWhile;
+                }
+            }
+            break;
+        } while (true);
+
+        bookingRepository.createBooking(secondBooking, secondVaccine);
     }
 
     /**
@@ -159,5 +218,17 @@ public class BookingService {
         }
 
         return times;
+    }
+
+    private LocalDateTime incrementDateTime(LocalDateTime ldt) {
+
+        LocalDateTime increment = ldt.plusMinutes(10);
+        if (increment.getHour() >= 19) {
+            increment = increment.plusDays(1);
+            increment = increment.withHour(9);
+            increment = increment.withMinute(0);
+        }
+
+        return increment;
     }
 }

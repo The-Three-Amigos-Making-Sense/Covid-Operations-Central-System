@@ -53,6 +53,15 @@
             <input type="hidden" name="type" value="TEST">
             <input class="form-submit w-250px" type="submit" value="Book Test">
         </form>
+        <hr>
+        <div class="ta-center fs-0-9em pad-sides-5px">
+            <p>
+                Here you can book time to get tested for covid-19
+            </p>
+            <p th:if="${param.error}" class="color-red">
+                Something went wrong. Please try again.
+            </p>
+        </div>
     </div>
 </section>
 
