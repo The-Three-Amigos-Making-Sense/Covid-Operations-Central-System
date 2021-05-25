@@ -80,6 +80,20 @@ public class BookingService {
         return false;
     }
 
+    public boolean userHasSecondShot(String username) {
+
+        List<Booking> bookingList = bookingRepository.fetchUsersBookings(username);
+
+        for (Booking booking : bookingList) {
+            BookingType bookingType = bookingRepository.fetchStatus(booking);
+            if (bookingType instanceof Vaccine) {
+                if (((Vaccine) bookingType).getType().equals("SECOND_SHOT") &&
+                    bookingType.getStatus().equals("RECEIVED")) return true;
+            }
+        }
+         return false;
+    }
+
     /**
      *
      * @param booking is the new booking a user is attempting to reserve

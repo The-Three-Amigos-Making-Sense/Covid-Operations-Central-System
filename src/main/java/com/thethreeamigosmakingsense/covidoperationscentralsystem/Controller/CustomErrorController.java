@@ -32,13 +32,21 @@ public class CustomErrorController implements ErrorController {
                 error = "404. Resource not found";
                 msg = "This is not the page you're looking for";
             }
+            case 409 -> { // Error Code: 409. Already has Test Booking
+                error = "ERROR";
+                msg = "You already have one active booking to get a covid-19 test";
+            }
+            case 410 -> { // Error Code: 410. Already has Vaccine Booking
+                error = "ERROR";
+                msg = "You already have one active booking to get a covid-19 vaccine";
+            }
+            case 411 -> {
+                error = "ERROR";
+                msg = "You have already received two shots of the covid-19 vaccine. You cannot receive anymore";
+            }
             case 418 -> { // Error Code: 418. I'm a teapot
                 error = "418. I'm a teapot";
                 msg = "Warning: I'm hot!";
-            }
-            case 425 -> { // Error Code: 425. Too early
-                error = "425. Too early";
-                msg = "You have attempted to book your second vaccine earlier than 24 days from your first shot";
             }
             case 500 -> { // Http Error Code: 500. Internal Server Error
                 error = "500. Internal Server Error";

@@ -3,10 +3,12 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Controller;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -30,7 +32,7 @@ public class BookingController {
         model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "TEST"));
 
         if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "TEST"))
-            return "booking/userHasBooking";
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         else return "booking/test";
     }
 
@@ -54,8 +56,10 @@ public class BookingController {
         model.addAttribute("date", getCurrentDate());
         model.addAttribute("times", bookingService.getAvailableTimes(getCurrentDate(), "VACCINE"));
 
-        if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "VACCINE"))
-            return "booking/userHasBooking";
+        if (bookingService.userHasSecondShot(http.getRemoteUser()))
+            throw new ResponseStatusException(HttpStatus.LENGTH_REQUIRED);
+        else if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "VACCINE"))
+            throw new ResponseStatusException(HttpStatus.GONE);
         else return "booking/vaccine";
     }
 
