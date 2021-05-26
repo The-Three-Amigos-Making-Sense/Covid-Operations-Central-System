@@ -80,18 +80,21 @@ public class BookingController {
     @PostMapping("/booked")
     private String test(Model model, Booking booking) {
 
-        String type = "";
+        booking.setUsername(http.getRemoteUser()); // in case a sneaky user attempts to book on behalf of someone else
+
+        String type;
 
         if (booking.getType().equals("TEST")) {
             model.addAttribute("navItem", "test");
             model.addAttribute("type", "covid-19 test");
             type = "test";
-        }
-        else if (booking.getType().equals("VACCINE")) {
+
+        } else if (booking.getType().equals("VACCINE")) {
             model.addAttribute("navItem", "vaccine");
             model.addAttribute("type", "covid-19 vaccine");
             type = "vaccine";
-        }
+
+        } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
         if (bookingService.newBooking(booking)) {
             return "booking/success";

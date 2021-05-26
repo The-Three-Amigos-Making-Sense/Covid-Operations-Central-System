@@ -5,12 +5,9 @@ import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.BookingT
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.TestResult;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Vaccine;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.BookingRepository;
-import groovy.lang.Tuple2;
 import groovy.lang.Tuple3;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -97,12 +94,12 @@ public class BookingService {
     /**
      *
      * @param booking is the new booking a user is attempting to reserve
-     * @return true or false depending on whether the booking has been saved to the database
+     * @return true or false depending on whether the booking has been correctly saved to the database
      */
     public boolean newBooking(Booking booking) {
 
         // Checks if the user already has an active booking of that type
-        if (userHasActiveBookingOfType(http.getRemoteUser(), booking.getType())) return false;
+        if (userHasActiveBookingOfType(booking.getUsername(), booking.getType())) return false;
 
         // Checks if the user is attempting to book a time that is not at the 10 minute interval
         if (Integer.parseInt(booking.getTime().substring(3,5)) % 10 != 0) return false;

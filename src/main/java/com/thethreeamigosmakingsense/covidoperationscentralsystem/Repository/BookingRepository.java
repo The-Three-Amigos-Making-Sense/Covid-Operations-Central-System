@@ -24,13 +24,13 @@ import java.util.List;
 public class BookingRepository {
 
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    HttpServletRequest http;
+    private HttpServletRequest http;
 
     public boolean createBooking(Booking booking, BookingType bookingType) {
 
@@ -45,7 +45,7 @@ public class BookingRepository {
                     connection -> {
                         PreparedStatement ps = connection.prepareStatement(finalSql, new String[] {"id"});
                         ps.setString(1, null);
-                        ps.setString(2, http.getRemoteUser());
+                        ps.setString(2, booking.getUsername());
                         ps.setString(3, booking.getDate());
                         ps.setString(4, booking.getTime());
                         ps.setString(5, booking.getType().toString());
