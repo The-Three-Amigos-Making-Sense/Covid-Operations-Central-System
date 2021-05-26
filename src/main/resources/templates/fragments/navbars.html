@@ -14,26 +14,17 @@
     </ul>
 
     <!-- ROLE_USER -->
-    <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_USER')">
+    <ul class="navbar-ul d-flex w-100" sec:authorize="hasAnyRole('ROLE_USER', 'ROLE_PERSONNEL', 'ROLE_ADMIN')">
         <li th:include="fragments/navItems :: navItemTest" class="navbar-item navbar-first"></li>
         <li th:include="fragments/navItems :: navItemVaccine" class="navbar-item"></li>
+        <li th:include="fragments/navItems :: navItemSearchuser" class="navbar-item"
+            sec:authorize="hasAnyRole('ROLE_PERSONNEL', 'ROLE_ADMIN')"></li>
         <li th:include="fragments/navItems :: navItemProfile" class="navbar-item"></li>
         <li th:include="fragments/navItems :: navItemMybookings" class="navbar-item"></li>
         <li th:include="fragments/navItems :: navItemLogout" class="navbar-item"></li>
     </ul>
 
-    <!-- ROLE_PERSONNEL -->
-    <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_PERSONNEL')">
-        <li th:include="fragments/navItems :: navItemSearchuser" class="navbar-item navbar-first"></li>
-        <li th:include="fragments/navItems :: navItemProfile" class="navbar-item"></li>
-        <li th:include="fragments/navItems :: navItemLogout" class="navbar-item"></li>
-    </ul>
 
-    <!-- ROLE_ADMIN -->
-    <ul class="navbar-ul d-flex w-100" sec:authorize="hasRole('ROLE_ADMIN')">
-        <li th:include="fragments/navItems :: navItemSearchuser" class="navbar-item navbar-first"></li>
-        <li th:include="fragments/navItems :: navItemLogout" class="navbar-item"></li>
-    </ul>
 </div>
 </body>
 </html>

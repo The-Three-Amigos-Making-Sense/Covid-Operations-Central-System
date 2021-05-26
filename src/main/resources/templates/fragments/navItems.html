@@ -24,7 +24,8 @@
         </form>
     </li>
 </ul>
-<!-- USERS -->
+
+<!-- AUTHORIZED -->
 <ul>
     <li th:fragment="navItemTest">
         <form th:action="@{/test}" method="get">
@@ -61,7 +62,9 @@
     </li>
     <li th:fragment="navItemSearchuser">
         <form th:action="@{/searchuser}">
-            <input class="menu-button" th:classappend="${navItem == 'searchuser'}? 'menu-button-active'" type="submit" value="Search Users"/>
+            <input class="menu-button"
+                   th:classappend="${navItem == 'searchuser'}? 'menu-button-active'"
+                   type="submit" value="Search Users"/>
         </form>
     </li>
 </ul>

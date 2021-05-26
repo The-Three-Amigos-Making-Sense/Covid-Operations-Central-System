@@ -17,7 +17,6 @@ public class HomeController {
     public String home(Model model) {
 
         User user = userRepository.fetchRemoteUser();
-        model.addAttribute("navItem", "home");
 
         model.addAttribute("firstname", user.getFirstname());
 

@@ -35,8 +35,5 @@ public class ProfileController {
         model.addAttribute("user", userService.fetchRemoteUser());
 
         return returnString;
-
-
-
     }
 }

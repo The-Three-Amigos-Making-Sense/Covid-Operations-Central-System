@@ -44,7 +44,7 @@ public class BookingController {
         model.addAttribute("times", bookingService.getAvailableTimes(date, "TEST"));
 
         if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "TEST"))
-            return "booking/userHasBooking";
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         else return "booking/test";
     }
 
@@ -70,7 +70,11 @@ public class BookingController {
         model.addAttribute("date", date);
         model.addAttribute("times", bookingService.getAvailableTimes(date, "VACCINE"));
 
-        return "booking/vaccine";
+        if (bookingService.userHasSecondShot(http.getRemoteUser()))
+            throw new ResponseStatusException(HttpStatus.LENGTH_REQUIRED);
+        else if (bookingService.userHasActiveBookingOfType(http.getRemoteUser(), "VACCINE"))
+            throw new ResponseStatusException(HttpStatus.GONE);
+        else return "booking/vaccine";
     }
 
     @PostMapping("/booked")
