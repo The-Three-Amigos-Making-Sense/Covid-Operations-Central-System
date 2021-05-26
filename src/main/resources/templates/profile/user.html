@@ -15,6 +15,21 @@
             <h1 th:text="|${user.getFirstname()} ${user.getLastname()}|"></h1>
         </div>
 
+        <div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${!isRemoteUser}" class="enabled-wrapper">
+            <div th:text="${user.isEnabled()} ? 'ENABLED' : 'DISABLED'"
+                 th:classappend="${user.isEnabled()} ? 'enabled-color' : 'disabled-color'"
+                 class="enabled-status"></div>
+
+            <div class="enabled-button">
+                <form th:action="@{/user/__${user.getUsername()}__}" method="post">
+                    <input th:value="${user.isEnabled()} ? 'DISABLE' : 'ENABLE'"
+                           th:classappend="${user.isEnabled()} ? 'disabled-color' : 'enabled-color'"
+                           class="enabled-button-input"
+                           type="submit" name="changeEnabled">
+                </form>
+            </div>
+        </div>
+
         <div class="ta-center m-top-50px">
             <h2>USER INFO</h2>
         </div>

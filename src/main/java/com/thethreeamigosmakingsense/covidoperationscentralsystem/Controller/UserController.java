@@ -106,6 +106,22 @@ public class UserController {
         return readUserInfo(username, model);
     }
 
+    @PostMapping(value = "/user/{username}", params = "changeEnabled")
+    private String changeEnabled(@PathVariable("username") String username, Model model,
+                                 @RequestParam(value = "changeEnabled") String changeEnabled) {
+
+        User user = userService.fetchUser(username);
+
+        switch (changeEnabled) {
+            case "DISABLE" -> user.setEnabled(false);
+            case "ENABLE" -> user.setEnabled(true);
+        }
+
+        userService.changeEnabledUser(user);
+
+        return readUserInfo(username, model);
+    }
+
     @GetMapping(value = "/mybookings")
     private String myBookings(Model model){
 

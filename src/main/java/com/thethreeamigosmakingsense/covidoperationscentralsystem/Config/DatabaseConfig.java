@@ -30,7 +30,7 @@ public class DatabaseConfig {
                         "lastname   varchar(25) NOT NULL, " +
                         "phone_no   varchar(8) NOT NULL UNIQUE, " +
                         "password   varchar(60) NOT NULL, " +
-                        "enabled    boolean NOT NULL, " +
+                            "enabled    boolean NOT NULL, " +
                         "PRIMARY KEY (username));",
 
                 "CREATE TABLE IF NOT EXISTS Authorities (" +

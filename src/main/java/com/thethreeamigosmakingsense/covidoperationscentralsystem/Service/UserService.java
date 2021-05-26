@@ -33,11 +33,15 @@ public class UserService {
         if (hasInvalidPhoneNo(user)) return false;
         if (hasEmptyFields(user)) return false;
 
-        return userRepository.updateUser(user);
+        return userRepository.updateRemoteUser(user);
     }
 
     public void updateAuthority(Authority authority) {
         userRepository.updateAuthority(authority);
+    }
+
+    public void changeEnabledUser(User user) {
+        userRepository.changeEnabledUser(user);
     }
 
     public User fetchUser(String username) {

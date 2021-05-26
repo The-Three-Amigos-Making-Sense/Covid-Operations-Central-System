@@ -30,7 +30,7 @@ public class UserRepository {
     public User fetchUser(String username) {
 
         String query = "SELECT username, email, firstname, lastname, " +
-                "phone_no FROM users WHERE username = ?";
+                "phone_no, enabled FROM users WHERE username = ?";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         List<User> userList = jdbcTemplate.query(query, rowMapper, username);
         if (userList.size() != 1) return null;
@@ -92,7 +92,7 @@ public class UserRepository {
         return true;
     }
 
-    public boolean updateUser(User user) {
+    public boolean updateRemoteUser(User user) {
 
         try {
             String sql = "UPDATE users SET email = ?, firstname = ?, lastname = ?, phone_no = ? " +
@@ -104,6 +104,14 @@ public class UserRepository {
             return false;
         }
         return true;
+    }
+
+    public void changeEnabledUser(User user) {
+
+        String sql = "UPDATE users SET enabled = ? WHERE username = ?";
+        jdbcTemplate.update(sql,
+                user.isEnabled(), user.getUsername());
+
     }
 
     public void updateAuthority(Authority authority) {

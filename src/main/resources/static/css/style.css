@@ -11,9 +11,14 @@
 ul { padding-inline-start: 0; }
 
 .color-green { color: #00da00 !important; }
+.color-lgreen { color: #86ff86 !important; }
 .color-red { color: #ef2121 !important; }
 
 .d-flex { display: flex; }
+.d-inline-block { display: inline-block; }
+
+.fl-left { float: left; }
+.fl-right { float: right; }
 
 .w-50 { width: 50% }
 .w-100 { width: 100%; }
@@ -194,4 +199,48 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+.enabled-wrapper {
+    margin-top: -95px;
+    padding-bottom: 50px;
+}
+
+.enabled-status {
+
+    margin-left: 10px;
+    padding: 6px;
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px 0 rgb(0 0 0 / 20%);
+    float: left;
+}
+
+.enabled-button {
+    margin-right: 10px;
+    float: right;
+}
+
+.enabled-button-input {
+    margin-left: 10px;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+    border-style: outset;
+    box-shadow: 0 2px 10px 0 rgb(0 0 0 / 20%);
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.enabled-button-input:hover {
+    border-style: inset;
+    cursor: pointer;
+}
+
+.enabled-color {
+    background: #04d304 !important;
+}
+
+.disabled-color {
+    background-color: #ef2121 !important;
 }
