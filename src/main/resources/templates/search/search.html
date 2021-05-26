@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{./fragments/layout.html}">
+      layout:decorate="~{./fragments/layout.html}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Search</title>
@@ -28,31 +28,41 @@
                 <th>Lastname</th>
                 <th>Email</th>
                 <th>Phone Number</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">Role</th>
             </tr>
             <tr class="data-tr browse-tr" th:each="user : ${users}">
                 <td>
-                    <a th:href="@{/user/__${user.getUsername()}__}">
-                        <span th:text="${user.getUsername()}"></span>
+                    <a th:href="@{/user/__${user.getFirst().getUsername()}__}">
+                        <span th:text="${user.getFirst().getUsername()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{/user/__${user.getUsername()}__}">
-                        <span th:text="${user.getFirstname()}"></span>
+                    <a th:href="@{/user/__${user.getFirst().getUsername()}__}">
+                        <span th:text="${user.getFirst().getFirstname()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{/user/__${user.getUsername()}__}">
-                        <span th:text="${user.getLastname()}"></span>
+                    <a th:href="@{/user/__${user.getFirst().getUsername()}__}">
+                        <span th:text="${user.getFirst().getLastname()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{/user/__${user.getUsername()}__}">
-                        <span th:text="${user.getEmail()}"></span>
+                    <a th:href="@{/user/__${user.getFirst().getUsername()}__}">
+                        <span th:text="${user.getFirst().getEmail()}"></span>
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{/user/__${user.getUsername()}__}">
-                        <span th:text="${user.getPhone_no()}"></span>
+                    <a th:href="@{/user/__${user.getFirst().getUsername()}__}">
+                        <span th:text="${user.getFirst().getPhone_no()}"></span>
+                    </a>
+                </td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/user/__${user.getFirst().getUsername()}__}">
+                        <span th:text="
+                                |${user.getSecond().getAuthority() == 'ROLE_USER' ? 'USER' : ''}
+                                 ${user.getSecond().getAuthority() == 'ROLE_PERSONNEL' ? 'PERSONNEL' : ''}
+                                 ${user.getSecond().getAuthority() == 'ROLE_ADMIN' ? 'ADMIN' : ''}|">
+                        </span>
                     </a>
                 </td>
             </tr>

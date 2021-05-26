@@ -137,9 +137,9 @@
         <span th:if=" ${navItem} == 'mybookings' or ${booking.getSecond().getStatus()} == 'CANCELLED'"
               class="info" th:text="${booking.getSecond().getStatus()}"
               th:classappend="
-                |${booking.getSecond().getStatus == 'CANCELLED' ? 'color-red' : ''}
-                 ${booking.getSecond().getStatus == 'POSITIVE' ? 'color-red' : ''}
-                 ${booking.getSecond().getStatus == 'NEGATIVE' ? 'color-green' : ''}|"></span>
+                |${booking.getSecond().getStatus() == 'CANCELLED' ? 'color-red' : ''}
+                 ${booking.getSecond().getStatus() == 'POSITIVE' ? 'color-red' : ''}
+                 ${booking.getSecond().getStatus() == 'NEGATIVE' ? 'color-green' : ''}|"></span>
       </a>
     </td>
     <td class="ta-right pad-right-15px">

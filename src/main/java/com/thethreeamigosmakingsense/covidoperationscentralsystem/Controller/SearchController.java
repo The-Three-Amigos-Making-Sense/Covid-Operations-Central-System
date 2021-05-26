@@ -28,10 +28,9 @@ public class SearchController {
         if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
-        List<User> userList = userService.fetchAllUsers();
 
         model.addAttribute("navItem", "searchuser");
-        model.addAttribute("users", userList);
+        model.addAttribute("users", userService.fetchAllUsersAndAuthorities());
 
         return "search/search";
     }

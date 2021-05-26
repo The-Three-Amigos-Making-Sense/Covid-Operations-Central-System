@@ -37,6 +37,12 @@ public class UserRepository {
         return userList.get(0);
     }
 
+    public Authority fetchAuthority(User user) {
+        String query = "SELECT * FROM authorities WHERE username = ?";
+        RowMapper<Authority> rowMapper = new BeanPropertyRowMapper<>(Authority.class);
+        return jdbcTemplate.queryForObject(query, rowMapper, user.getUsername());
+    }
+
     public User fetchRemoteUser() {
 
         String remoteUser = http.getRemoteUser();
@@ -98,6 +104,12 @@ public class UserRepository {
             return false;
         }
         return true;
+    }
+
+    public void updateAuthority(Authority authority) {
+
+        String sql = "UPDATE authorities SET authority = ? WHERE username = ?";
+        jdbcTemplate.update(sql, authority.getAuthority(), authority.getUsername());
     }
 
     public String getAuthority(String username) {

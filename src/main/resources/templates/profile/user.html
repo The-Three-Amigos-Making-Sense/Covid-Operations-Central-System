@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{./fragments/layout.html}">
+      layout:decorate="~{./fragments/layout.html}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>User</title>
@@ -25,6 +25,7 @@
                 <th style="width: 150px">Lastname</th>
                 <th style="width: 190px">Email</th>
                 <th style="width: 120px">Phone Number</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')" th:if="${!isRemoteUser}">Role</th>
             </tr>
 
             <tr class="data-tr profile-tr">
@@ -53,7 +54,34 @@
                         <span class="info" th:text="${user.getPhone_no()}"></span>
                     </a>
                 </td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${!isRemoteUser}">
+                    <a>
+                        <form id="changeAuthority" th:action="@{/user/__${user.getUsername()}__}" method="post">
+                            <select required name="updateAuthority">
+                                <option disabled selected value style="display: none"
+                                        th:text="|${authority.getAuthority() == 'ROLE_USER' ? 'USER' : ''}
+                                                  ${authority.getAuthority() == 'ROLE_PERSONNEL' ? 'PERSONNEL' : ''}
+                                                  ${authority.getAuthority() == 'ROLE_ADMIN' ? 'ADMIN' : ''}|">
+                                </option>
+                                <option th:each="authorityString : ${authorityStrings}"
+                                        th:if="${authorityString} != ${authority.getAuthority()}"
+                                        th:text="|${authorityString == 'ROLE_USER' ? 'USER' : ''}
+                                                  ${authorityString == 'ROLE_PERSONNEL' ? 'PERSONNEL' : ''}
+                                                  ${authorityString == 'ROLE_ADMIN' ? 'ADMIN' : ''}|">
+
+                                </option>
+                            </select>
+                        </form>
+                    </a>
+                </td>
             </tr>
+            <script type="text/javascript">
+                let changeAuthority = document.getElementById("changeAuthority");
+
+                changeAuthority.addEventListener("change", function() {
+                    changeAuthority.submit();
+                });
+            </script>
         </table>
 
         <table th:replace="fragments/bookings :: usersVaccineBookings"></table>

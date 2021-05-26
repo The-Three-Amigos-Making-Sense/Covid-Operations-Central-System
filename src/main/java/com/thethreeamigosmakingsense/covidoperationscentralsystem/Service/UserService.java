@@ -1,11 +1,14 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Service;
 
+import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Authority;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.UserRepository;
+import groovy.lang.Tuple2;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,8 +36,16 @@ public class UserService {
         return userRepository.updateUser(user);
     }
 
+    public void updateAuthority(Authority authority) {
+        userRepository.updateAuthority(authority);
+    }
+
     public User fetchUser(String username) {
         return userRepository.fetchUser(username);
+    }
+
+    public Authority fetchAuthority(User user) {
+        return userRepository.fetchAuthority(user);
     }
 
     public User fetchRemoteUser() {
@@ -43,6 +54,16 @@ public class UserService {
 
     public List<User> fetchAllUsers() {
         return userRepository.fetchAllUsers();
+    }
+
+    public List<Tuple2<User, Authority>> fetchAllUsersAndAuthorities() {
+        List<Tuple2<User, Authority>> userList = new ArrayList<>();
+
+        for (User user : fetchAllUsers()) {
+            userList.add(new Tuple2<>(user, userRepository.fetchAuthority(user)));
+        }
+
+        return userList;
     }
 
     public List<User> searchAllUsers(String searchTerm) {

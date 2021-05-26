@@ -34,6 +34,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         User user = userService.fetchUser(username);
+        Authority authority = userService.fetchAuthority(user);
         List<Tuple3<Booking, BookingType, Boolean>> bookingList = bookingService.fetchUsersBoookings(username);
         Tuple2<Boolean, Boolean> hasBookings = userHasBooking(bookingList);
 
@@ -41,20 +42,24 @@ public class UserController {
 
         String[] vaccineStatus = {"PENDING", "RECEIVED", "CANCELLED"};
         String[] testStatus = {"TEST_PENDING", "RESULT_PENDING", "NEGATIVE", "POSITIVE", "CANCELLED"};
+        String[] authorities = {"ROLE_USER", "ROLE_PERSONNEL", "ROLE_ADMIN"};
 
+        model.addAttribute("isRemoteUser", username.equals(http.getRemoteUser()));
         model.addAttribute("vaccineStatus", vaccineStatus);
         model.addAttribute("testStatus", testStatus);
         model.addAttribute("hasTestBooking", hasBookings.getFirst());
         model.addAttribute("hasVaccineBooking", hasBookings.getSecond());
         model.addAttribute("user", user);
+        model.addAttribute("authority", authority);
+        model.addAttribute("authorityStrings", authorities);
         model.addAttribute("bookings", bookingList);
 
         return "profile/user";
     }
 
     @PostMapping(value = "/user/{username}", params = "updateTest")
-    private String readUserInfo(@PathVariable("username") String username, Model model, String id,
-            @RequestParam(value = "updateTest") String status) {
+    private String updateTest(@PathVariable("username") String username, Model model, String id,
+                              @RequestParam(value = "updateTest") String status) {
 
         if (status.equalsIgnoreCase("cancel")) status = "CANCELLED";
 
@@ -65,9 +70,9 @@ public class UserController {
         return readUserInfo(username, model);
     }
 
-    @PostMapping(value = "/user/{username}", params = {"updateVaccine"})
-    private String readUserInfo(@PathVariable("username") String username, Model model, String id,
-             @RequestParam(value = "updateVaccine") String status, String type) {
+    @PostMapping(value = "/user/{username}", params = "updateVaccine")
+    private String updateVaccine(@PathVariable("username") String username, Model model, String id,
+                                 @RequestParam(value = "updateVaccine") String status, String type) {
 
         if (status.equalsIgnoreCase("cancel")) status = "CANCELLED";
 
@@ -78,6 +83,25 @@ public class UserController {
         if (vaccine.getType().equals("FIRST_SHOT") && vaccine.getStatus().equals("RECEIVED")) {
             bookingService.autoBookSecondShot(username, vaccine);
         }
+
+        return readUserInfo(username, model);
+    }
+
+    @PostMapping(value = "/user/{username}", params = "updateAuthority")
+    private String updateAuthority(@PathVariable("username") String username, Model model,
+                                   @RequestParam(value="updateAuthority") String authority) {
+
+        switch (authority) {
+            case "USER" -> authority = "ROLE_USER";
+            case "PERSONNEL" -> authority = "ROLE_PERSONNEL";
+            case "ADMIN" -> authority = "ROLE_ADMIN";
+        }
+
+        Authority auth = new Authority();
+        auth.setUsername(username);
+        auth.setAuthority(authority);
+
+        userService.updateAuthority(auth);
 
         return readUserInfo(username, model);
     }
