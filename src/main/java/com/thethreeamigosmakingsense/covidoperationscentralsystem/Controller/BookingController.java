@@ -18,10 +18,10 @@ import java.time.format.DateTimeFormatter;
 public class BookingController {
 
     @Autowired
-    BookingService bookingService;
+    private BookingService bookingService;
 
     @Autowired
-    HttpServletRequest http;
+    private HttpServletRequest http;
 
     @GetMapping("/test")
     private String test(Model model) {

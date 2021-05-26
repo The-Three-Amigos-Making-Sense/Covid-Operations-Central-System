@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomErrorController implements ErrorController {
 
     @GetMapping("/error")
-    public String error(Model model, HttpServletRequest http) {
+    private String error(Model model, HttpServletRequest http) {
 
         int errorCode = (int) http.getAttribute("javax.servlet.error.status_code");
         String error;
@@ -64,13 +64,13 @@ public class CustomErrorController implements ErrorController {
         return "error/error";
     }
 
+    @GetMapping("/teapot")
+    private void teapot() {
+        throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
+    }
+
     @Override
     public String getErrorPath() {
         return null;
-    }
-
-    @GetMapping("/teapot")
-    public void teapot() {
-        throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
     }
 }

@@ -19,16 +19,16 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    BookingService bookingService;
+    private BookingService bookingService;
 
     @Autowired
-    HttpServletRequest http;
+    private HttpServletRequest http;
 
     @GetMapping(value = "/user/{username}")
-    public String readUserInfo(@PathVariable("username") String username, Model model) {
+    private String readUserInfo(@PathVariable("username") String username, Model model) {
 
         if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);

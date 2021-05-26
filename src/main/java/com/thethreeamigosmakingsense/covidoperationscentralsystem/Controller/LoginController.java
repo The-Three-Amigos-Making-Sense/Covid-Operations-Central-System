@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginController {
 
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
+    private String showLoginForm(Model model) {
 
         model.addAttribute("navItem", "login");
 

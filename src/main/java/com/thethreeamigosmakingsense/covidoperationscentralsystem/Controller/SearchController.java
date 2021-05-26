@@ -17,13 +17,13 @@ import java.util.List;
 public class SearchController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    HttpServletRequest http;
+    private HttpServletRequest http;
 
     @GetMapping("/searchuser")
-    public String search(Model model) {
+    private String search(Model model) {
 
         if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -35,7 +35,7 @@ public class SearchController {
     }
 
     @PostMapping(value = "/searchuser", params = "search")
-    public String search(Model model, String searchTerm) {
+    private String search(Model model, String searchTerm) {
 
         model.addAttribute("navItem", "searchuser");
         model.addAttribute("searchTerm", searchTerm);
@@ -50,7 +50,7 @@ public class SearchController {
     }
 
     @PostMapping(value = "/searchuser", params = "reset")
-    public String reset(Model model) {
+    private String reset(Model model) {
 
         return search(model);
     }

@@ -30,7 +30,7 @@ public class DatabaseConfig {
                         "lastname   varchar(25) NOT NULL, " +
                         "phone_no   varchar(8) NOT NULL UNIQUE, " +
                         "password   varchar(60) NOT NULL, " +
-                            "enabled    boolean NOT NULL, " +
+                        "enabled    boolean NOT NULL, " +
                         "PRIMARY KEY (username));",
 
                 "CREATE TABLE IF NOT EXISTS Authorities (" +
@@ -43,7 +43,7 @@ public class DatabaseConfig {
                 "CREATE TABLE IF NOT EXISTS Bookings (" +
                         "booking_id int AUTO_INCREMENT, " +
                         "username   varchar(11) NOT NULL, " +
-                        "`date`     varchar(10) NOT NULL, " +
+                        "date       varchar(10) NOT NULL, " +
                         "time       varchar(5) NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +

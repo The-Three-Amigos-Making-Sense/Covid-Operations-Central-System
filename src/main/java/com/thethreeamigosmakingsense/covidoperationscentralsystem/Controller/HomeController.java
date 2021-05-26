@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/")
-    public String home(Model model) {
+    private String home(Model model) {
 
         User user = userRepository.fetchRemoteUser();
 

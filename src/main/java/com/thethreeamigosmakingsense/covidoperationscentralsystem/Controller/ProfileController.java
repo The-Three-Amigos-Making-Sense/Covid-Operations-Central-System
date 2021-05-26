@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProfileController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/profile")
     private String profile(Model model) {
@@ -24,7 +24,7 @@ public class ProfileController {
     }
 
     @PostMapping("/profile")
-    public String profile(Model model, User user) {
+    private String profile(Model model, User user) {
 
         String returnString;
         if (userService.updateUser(user)) returnString = "profile/profile";
