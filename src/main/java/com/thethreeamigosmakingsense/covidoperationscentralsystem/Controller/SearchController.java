@@ -1,7 +1,9 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Controller;
 
+import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Authority;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Service.UserService;
+import groovy.lang.Tuple2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -42,7 +44,7 @@ public class SearchController {
 
         if (searchTerm.isBlank()) return search(model);
         else  {
-            List<User> userList = userService.searchAllUsers(searchTerm);
+            List<Tuple2<User, Authority>> userList = userService.searchAllUsers(searchTerm);
             model.addAttribute("users", userList);
         }
 

@@ -70,8 +70,15 @@ public class UserService {
         return userList;
     }
 
-    public List<User> searchAllUsers(String searchTerm) {
-        return userRepository.searchAllUsers(searchTerm);
+    public List<Tuple2<User, Authority>> searchAllUsers(String searchTerm) {
+
+        List<Tuple2<User, Authority>> userList = new ArrayList<>();
+
+        for (User user : userRepository.searchAllUsers(searchTerm)) {
+            userList.add(new Tuple2<>(user, userRepository.fetchAuthority(user)));
+        }
+
+        return userList;
     }
 
     public String checkPrivilege(String username) {
