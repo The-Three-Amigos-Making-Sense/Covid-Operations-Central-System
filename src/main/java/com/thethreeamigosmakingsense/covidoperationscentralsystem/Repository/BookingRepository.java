@@ -54,7 +54,7 @@ public class BookingRepository {
                     keyHolder);
 
             if (bookingType instanceof TestResult) {
-                sql = "insert into TestResult values (?, ?);";
+                sql = "insert into testresult values (?, ?);";
                 jdbcTemplate.update(sql,
                         keyHolder.getKey(), bookingType.getStatus());
 

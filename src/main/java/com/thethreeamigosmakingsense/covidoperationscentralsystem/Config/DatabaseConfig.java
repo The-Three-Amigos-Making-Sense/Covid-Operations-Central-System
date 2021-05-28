@@ -23,7 +23,7 @@ public class DatabaseConfig {
 
         String query;
         String[] queries = {
-                "CREATE TABLE IF NOT EXISTS Users (" +
+                "CREATE TABLE IF NOT EXISTS users (" +
                         "username   varchar(11) NOT NULL, " +
                         "email      varchar(320) NOT NULL UNIQUE, " +
                         "firstname  varchar(25) NOT NULL, " +
@@ -33,39 +33,39 @@ public class DatabaseConfig {
                         "enabled    boolean NOT NULL, " +
                         "PRIMARY KEY (username));",
 
-                "CREATE TABLE IF NOT EXISTS Authorities (" +
+                "CREATE TABLE IF NOT EXISTS authorities (" +
                         "username  varchar(11) NOT NULL, " +
                         "authority varchar(14) NOT NULL, " +
                         "PRIMARY KEY (username), " +
-                        "CONSTRAINT Authorities FOREIGN KEY (username) " +
-                        "   REFERENCES Users (username) ON DELETE CASCADE);",
+                        "CONSTRAINT authorities FOREIGN KEY (username) " +
+                        "   REFERENCES users (username) ON DELETE CASCADE);",
 
-                "CREATE TABLE IF NOT EXISTS Bookings (" +
+                "CREATE TABLE IF NOT EXISTS bookings (" +
                         "booking_id int AUTO_INCREMENT, " +
                         "username   varchar(11) NOT NULL, " +
                         "date       varchar(10) NOT NULL, " +
                         "time       varchar(5) NOT NULL, " +
                         "type       varchar(7) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
-                        "CONSTRAINT Bookings FOREIGN KEY (username) " +
-                        "   REFERENCES Users (username) ON DELETE CASCADE);",
+                        "CONSTRAINT bookings FOREIGN KEY (username) " +
+                        "   REFERENCES users (username) ON DELETE CASCADE);",
 
-                "CREATE TABLE IF NOT EXISTS TestResult (" +
+                "CREATE TABLE IF NOT EXISTS testresult (" +
                         "booking_id int(10) NOT NULL, " +
                         "status     varchar(14) NOT NULL, " +
                         "PRIMARY KEY (booking_id)," +
-                        "CONSTRAINT TestResult FOREIGN KEY (booking_id) " +
-                        "   REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
+                        "CONSTRAINT testresult FOREIGN KEY (booking_id) " +
+                        "   REFERENCES bookings (booking_id) ON DELETE CASCADE);",
 
-                "CREATE TABLE IF NOT EXISTS Vaccine (" +
+                "CREATE TABLE IF NOT EXISTS vaccine (" +
                         "booking_id int(10) NOT NULL, " +
                         "type       varchar(11) NOT NULL, " +
                         "status varchar(9) NOT NULL, " +
                         "PRIMARY KEY (booking_id), " +
-                        "CONSTRAINT Vaccine FOREIGN KEY (booking_id) " +
-                        "   REFERENCES Bookings (booking_id) ON DELETE CASCADE);",
+                        "CONSTRAINT vaccine FOREIGN KEY (booking_id) " +
+                        "   REFERENCES bookings (booking_id) ON DELETE CASCADE);",
 
-                "ALTER TABLE Bookings AUTO_INCREMENT = 1",
+                "ALTER TABLE bookings AUTO_INCREMENT = 1",
         };
 
         jdbcTemplate.batchUpdate(queries);
@@ -95,13 +95,13 @@ public class DatabaseConfig {
 
             Authority adminAuthority = new Authority(admin, "ROLE_ADMIN");
 
-            String insertAdmin = "insert into users (username, email, firstname, " +
-                    "lastname, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);";
+            String insertAdmin = "INSERT INTO users (username, email, firstname, " +
+                    "lastname, phone_no, password, enabled) VALUES (?, ?, ?, ?, ?, ?, ?);";
             jdbcTemplate.update(insertAdmin,
                     admin.getUsername(), admin.getEmail(), admin.getFirstname(),
                     admin.getLastname(), admin.getPhone_no(), admin.getPassword(), true);
 
-            String insertAdminAuthority = "insert into authorities (username, authority) values (?, ?);";
+            String insertAdminAuthority = "INSERT INTO authorities (username, authority) VALUES (?, ?);";
             jdbcTemplate.update(insertAdminAuthority,
                     admin.getUsername(), adminAuthority.getAuthority());
         }
@@ -118,13 +118,13 @@ public class DatabaseConfig {
 
             Authority personnelAuthority = new Authority(personnel,"ROLE_PERSONNEL");
 
-            String insertPersonnel = "insert into users (username, email, firstname, " +
-                    "lastname, phone_no, password, enabled) values (?, ?, ?, ?, ?, ?, ?);";
+            String insertPersonnel = "INSERT INTO users (username, email, firstname, " +
+                    "lastname, phone_no, password, enabled) VALUES (?, ?, ?, ?, ?, ?, ?);";
             jdbcTemplate.update(insertPersonnel,
                     personnel.getUsername(), personnel.getEmail(), personnel.getFirstname(),
                     personnel.getLastname(), personnel.getPhone_no(), personnel.getPassword(), true);
 
-            String insertPersonnelAuthority = "insert into authorities (username, authority) values (?, ?);";
+            String insertPersonnelAuthority = "INSERT INTO authorities (username, authority) VALUES (?, ?);";
             jdbcTemplate.update(insertPersonnelAuthority,
                     personnel.getUsername(), personnelAuthority.getAuthority());
         }
