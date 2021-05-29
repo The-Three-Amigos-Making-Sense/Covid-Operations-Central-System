@@ -17,10 +17,10 @@ import java.util.*;
 public class BookingService {
 
     @Autowired
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     @Autowired
-    HttpServletRequest http;
+    private HttpServletRequest http;
 
     public Booking fetchBookingByID(int id) {
         return bookingRepository.fetchBookingByID(id);

@@ -2,9 +2,9 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 
 public interface BookingType {
 
-    public Integer getBooking_id();
+    Integer getBooking_id();
 
-    public String getStatus();
+    String getStatus();
 
-    public void setStatus(String status);
+    void setStatus(String status);
 }

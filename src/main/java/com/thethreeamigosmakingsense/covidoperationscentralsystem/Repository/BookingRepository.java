@@ -15,8 +15,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.util.List;
 
@@ -24,13 +22,7 @@ import java.util.List;
 public class BookingRepository {
 
     @Autowired
-    private DataSource dataSource;
-
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private HttpServletRequest http;
 
     public boolean createBooking(Booking booking, BookingType bookingType) {
 
@@ -107,16 +99,6 @@ public class BookingRepository {
             RowMapper<Vaccine> rowMapper = new BeanPropertyRowMapper<>(Vaccine.class);
             return jdbcTemplate.queryForObject(sql, rowMapper, booking.getBooking_id());
         }
-    }
-
-    public boolean isAvailable(Booking booking) {
-
-        String sql = "SELECT * FROM bookings WHERE date = ? and time = ? and type = ?";
-        RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
-        List<Booking> bookingList =
-                jdbcTemplate.query(sql, rowMapper, booking.getDate(), booking.getTime(), booking.getType());
-
-        return bookingList.size() == 0;
     }
 
     public void updateStatus(BookingType bookingType) {

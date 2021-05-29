@@ -78,7 +78,7 @@ public class BookingController {
     }
 
     @PostMapping("/booked")
-    private String test(Model model, Booking booking) {
+    private String book(Model model, Booking booking) {
 
         booking.setUsername(http.getRemoteUser()); // in case a sneaky user attempts to book on behalf of someone else
 
