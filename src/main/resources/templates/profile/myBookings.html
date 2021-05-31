@@ -21,6 +21,9 @@
             <p>Book time for a <a th:href="@{/test}">covid-19 test</a> or <a th:href="@{/vaccine}">vaccine</a></p>
         </div>
 
+        <div class="ta-center">
+            <a th:if="${hasSecondShot}" th:href="@{/vaccine_certificate}" target="_blank">Print Proof of Vaccination</a>
+        </div>
         <table th:replace="fragments/bookings :: usersVaccineBookings"></table>
         <table th:replace="fragments/bookings :: usersTestBookings"></table>
 

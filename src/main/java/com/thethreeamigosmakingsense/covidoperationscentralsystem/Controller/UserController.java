@@ -142,6 +142,7 @@ public class UserController {
         Tuple2<Boolean, Boolean> hasBookings = userHasBooking(bookingList);
 
         model.addAttribute("navItem", "mybookings");
+        model.addAttribute("hasSecondShot", bookingService.userHasSecondShot(http.getRemoteUser())); // displays option to print certificate if true
         model.addAttribute("hasTestBooking", hasBookings.getFirst());     // if false the table is never rendered
         model.addAttribute("hasVaccineBooking", hasBookings.getSecond()); // if false the table is never rendered
         model.addAttribute("bookings", bookingList);
@@ -177,6 +178,10 @@ public class UserController {
 
     @GetMapping("/vaccine_certificate")
     private ResponseEntity<byte[]> parseTemplate() {
+
+        if (!bookingService.userHasSecondShot(http.getRemoteUser()))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
@@ -188,8 +193,6 @@ public class UserController {
                 bookingService.fetchUsersBoookings(http.getRemoteUser());
         bookingList.removeIf(booking -> !booking.getFirst().getType().equals("VACCINE"));
         bookingList.removeIf(bookingType -> !bookingType.getSecond().getStatus().equals("RECEIVED"));
-
-
 
         Context context = new Context();
         context.setVariable("user", userService.fetchUser(http.getRemoteUser()));
