@@ -30,8 +30,14 @@ public class SearchController {
         if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_USER"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
+        List<Tuple2<User, Authority>> userList = userService.fetchAllUsersAndAuthorities();
+
+        if (userService.checkPrivilege(http.getRemoteUser()).equals("ROLE_PERSONNEL"))
+            userList.removeIf(user -> !user.getFirst().isEnabled());
+
+
         model.addAttribute("navItem", "searchuser");
-        model.addAttribute("users", userService.fetchAllUsersAndAuthorities());
+        model.addAttribute("users", userList);
 
         return "search/search";
     }

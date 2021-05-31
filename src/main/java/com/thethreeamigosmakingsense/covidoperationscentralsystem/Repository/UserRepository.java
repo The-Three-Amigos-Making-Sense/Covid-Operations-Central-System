@@ -56,7 +56,7 @@ public class UserRepository {
 
     public List<User> fetchAllUsers() {
 
-        String query = "SELECT users.username, email, firstname, lastname, phone_no  FROM users";
+        String query = "SELECT * FROM users";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         return jdbcTemplate.query(query, rowMapper);
     }
