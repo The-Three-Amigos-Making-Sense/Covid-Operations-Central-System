@@ -1,5 +1,7 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Controller;
 
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.*;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Service.BookingService;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Service.UserService;
@@ -7,12 +9,19 @@ import groovy.lang.Tuple2;
 import groovy.lang.Tuple3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 @Controller
@@ -164,6 +173,45 @@ public class UserController {
         bookingService.updateStatus(vaccine);
 
         return myBookings(model);
+    }
+
+    @GetMapping("/vaccine_certificate")
+    private ResponseEntity<byte[]> parseTemplate() {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+
+        List<Tuple3<Booking, BookingType, Boolean>> bookingList =
+                bookingService.fetchUsersBoookings(http.getRemoteUser());
+        bookingList.removeIf(booking -> !booking.getFirst().getType().equals("VACCINE"));
+        bookingList.removeIf(bookingType -> !bookingType.getSecond().getStatus().equals("RECEIVED"));
+
+
+
+        Context context = new Context();
+        context.setVariable("user", userService.fetchUser(http.getRemoteUser()));
+        context.setVariable("bookings", bookingList);
+
+        String html = templateEngine.process("templates/certificate/vaccine_certificate.html", context);
+
+        ByteArrayOutputStream target = new ByteArrayOutputStream();
+
+        ConverterProperties converterProperties = new ConverterProperties();
+        converterProperties.setBaseUri("http://localhost:6060");
+
+        HtmlConverter.convertToPdf(html, target, converterProperties);
+
+        /* extract output as bytes */
+        byte[] bytes = target.toByteArray();
+
+        /* Send the response as downloadable PDF */
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(bytes);
     }
 
     /**

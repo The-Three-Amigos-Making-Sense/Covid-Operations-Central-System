@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+    table th { padding: 0 50px; }
+</style>
+<body>
+<div style="text-align: center">
+    <img style="max-width: 500px" src="http://localhost:6060/img/site-logo.png">
+</div>
+<h3 style="text-align: center; color: green">
+    <span th:text="'Vaccine Certificate'"></span>
+</h3>
+<p style="text-align: center">It is hereby confirmed that this person has received both shots of the Corona Vaccine</p>
+<br><br>
+<div style="display: inline-block; width: 100px; padding-left: 50px">
+    CPR:</div>
+<div style="display: inline-block">
+ [[${user.getUsername()}]]</div>
+<br>
+<div style="display: inline-block; width: 100px; padding-left: 50px">
+    Name:
+</div>
+<div style="display: inline-block">
+    [[${user.getFirstname()}]] [[${user.getLastname()}]]
+</div>
+<br><br><br><br>
+
+<div style="text-align: center">
+    <table >
+        <tr><th>Date</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Status</th></tr>
+        <tr th:each="booking : ${bookings}">
+            <td th:text="${booking.getFirst().getDate()}"></td>
+            <td th:text="${booking.getFirst().getTime()}"></td>
+            <td th:text="${booking.getSecond().getType()}"></td>
+            <td style="color: green" th:text="${booking.getSecond().getStatus()}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
