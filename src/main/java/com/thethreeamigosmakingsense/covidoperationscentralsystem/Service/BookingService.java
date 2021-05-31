@@ -5,6 +5,7 @@ import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.BookingT
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.TestResult;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Vaccine;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.BookingRepository;
+import groovy.lang.Tuple2;
 import groovy.lang.Tuple3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,17 @@ public class BookingService {
 
     public Booking fetchBookingByID(int id) {
         return bookingRepository.fetchBookingByID(id);
+    }
+
+    public List<Tuple2<Booking, BookingType>> fetchAllBookings() {
+        List<Tuple2<Booking, BookingType>> bookingList = new ArrayList<>();
+
+        for (Booking booking : bookingRepository.fetchAllBookings()) {
+            BookingType bookingType = bookingRepository.fetchStatus(booking);
+            bookingList.add(new Tuple2<>(booking, bookingType));
+        }
+
+        return bookingList;
     }
 
     public void updateStatus(BookingType bookingtype) {

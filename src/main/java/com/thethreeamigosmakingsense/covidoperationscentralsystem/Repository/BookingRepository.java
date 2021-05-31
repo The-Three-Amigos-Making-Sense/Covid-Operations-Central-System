@@ -4,6 +4,7 @@ import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Booking;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.BookingType;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.TestResult;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.Vaccine;
+import groovy.lang.Tuple2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,12 @@ public class BookingRepository {
             return false;
         }
         return true;
+    }
+
+    public List<Booking> fetchAllBookings() {
+        String sql = "SELECT * FROM bookings";
+        RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     public List<Booking> fetchAllBookingsByType(String type) {

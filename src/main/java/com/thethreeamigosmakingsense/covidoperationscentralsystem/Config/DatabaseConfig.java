@@ -112,7 +112,7 @@ public class DatabaseConfig {
                 getNumberOfPersonnel, Integer.class, "ROLE_PERSONNEL");
 
         if (numberOfPersonnel == null || numberOfPersonnel == 0) {
-            User personnel = new User("Personnel", "personnel@cocs.com", "Test",
+            User personnel = new User("Personnel", "personnel@cocs.com", "Employee",
                     "Personnel", "87654321", "0000");
             personnel.setPassword(passwordEncoder.encode(personnel.getPassword()));
 

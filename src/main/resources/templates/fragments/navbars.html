@@ -13,10 +13,12 @@
         <li th:include="fragments/navItems :: navItemSignup" class="navbar-item"></li>
     </ul>
 
-    <!-- ROLE_USER -->
+    <!-- AUTHORIZED -->
     <ul class="navbar-ul d-flex w-100" sec:authorize="hasAnyRole('ROLE_USER', 'ROLE_PERSONNEL', 'ROLE_ADMIN')">
         <li th:include="fragments/navItems :: navItemTest" class="navbar-item navbar-first"></li>
         <li th:include="fragments/navItems :: navItemVaccine" class="navbar-item"></li>
+        <li th:include="fragments/navItems :: navItemCalendar" class="navbar-item"
+            sec:authorize="hasAnyRole('ROLE_PERSONNEL', 'ROLE_ADMIN')"></li>
         <li th:include="fragments/navItems :: navItemSearchuser" class="navbar-item"
             sec:authorize="hasAnyRole('ROLE_PERSONNEL', 'ROLE_ADMIN')"></li>
         <li th:include="fragments/navItems :: navItemProfile" class="navbar-item"></li>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{./fragments/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar</title>
+    <link th:href="@{/css/tables.css}"
+          rel="stylesheet" type="text/css" media="screen"/>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="content-wrapper w-700px">
+        <div class="content-title">
+            <h1>Calendar</h1>
+        </div>
+
+        <table class="user-table w-100">
+            <tr>
+                <th>CPR</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Type</th>
+            </tr>
+            <tr class="data-tr browse-tr" th:each="booking : ${bookings}">
+                <td>
+                    <a th:href="@{/user/__${booking.getFirst().getUsername()}__}">
+                        <span th:text="${booking.getFirst().getUsername()}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/user/__${booking.getFirst().getUsername()}__}">
+                        <span th:text="${booking.getFirst().getDate()}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/user/__${booking.getFirst().getUsername()}__}">
+                        <span th:text="${booking.getFirst().getTime()}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/user/__${booking.getFirst().getUsername()}__}">
+                        <span th:text="${booking.getFirst().getType()}"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>

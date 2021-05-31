@@ -67,6 +67,13 @@
                    type="submit" value="Browse Users"/>
         </form>
     </li>
+    <li th:fragment="navItemCalendar">
+        <form th:action="@{/calendar}">
+            <input class="menu-button"
+                   th:classappend="${navItem == 'calendar'}? 'menu-button-active'"
+                   type="submit" value="Calendar"/>
+        </form>
+    </li>
 </ul>
 
 
