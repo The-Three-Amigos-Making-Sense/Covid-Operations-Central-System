@@ -18,6 +18,10 @@ public class DatabaseConfig {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    /**
+     * A method to create everything inside the database that is necessary
+     * for the program to work. Needs the schema and user to be setup externally
+     */
     @PostConstruct
     public void initializeDatabase() {
 
@@ -77,6 +81,7 @@ public class DatabaseConfig {
         String index = "userIndex";
         Integer indexes = jdbcTemplate.queryForObject(query, Integer.class, index);
 
+        // If 0 indexes, it will be created
         if (indexes == null || indexes == 0) {
 
             query = "CREATE FULLTEXT INDEX userIndex ON users(username, email, firstname, lastname, phone_no)";

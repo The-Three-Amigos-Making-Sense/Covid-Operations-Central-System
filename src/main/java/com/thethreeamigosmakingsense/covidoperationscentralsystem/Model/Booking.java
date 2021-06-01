@@ -21,26 +21,23 @@ public class Booking {
         this.type = type;
     }
 
-    public Integer getBooking_id() {
-        return booking_id;
+    /**
+     * Compares this booking with another booking by time and date
+     * @param booking object
+     * @return boolean
+     */
+    public boolean equals(Booking booking) {
+        return
+                this.date.equals(booking.getDate()) &&
+                        this.time.equals(booking.getTime()) &&
+                        this.type.equals(booking.getType());
     }
 
-    public void setBooking_id(Integer booking_id) {
-        this.booking_id = booking_id;
-    }
+    /* GETTERS AND SETTERS */
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
+    /**
+     * @return LocalDateTime from Strings date and time
+     */
     public LocalDateTime getLocalDateTime() {
         int year = Integer.parseInt(date.substring(6));
         int month = Integer.parseInt(date.substring(3, 5));
@@ -51,6 +48,10 @@ public class Booking {
         return LocalDateTime.of(year, month, day, hour, minute);
     }
 
+    /**
+     * sets the date and time fields using a LocalDateTime object
+     * @param ldt the LocalDateTime object
+     */
     public void setDateTime(LocalDateTime ldt) {
 
         String day;
@@ -75,6 +76,26 @@ public class Booking {
         time = hour + ":" + minute;
     }
 
+    public Integer getBooking_id() {
+        return booking_id;
+    }
+
+    public void setBooking_id(Integer booking_id) {
+        this.booking_id = booking_id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
@@ -95,14 +116,5 @@ public class Booking {
         this.type = type;
     }
 
-    public String getConcatTime() {
-        return time.substring(0, 2) + time.substring(3);
-    }
 
-    public boolean equals(Booking booking) {
-        return
-                this.date.equals(booking.getDate()) &&
-                this.time.equals(booking.getTime()) &&
-                this.type.equals(booking.getType());
-    }
 }

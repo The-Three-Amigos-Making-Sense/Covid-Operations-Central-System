@@ -17,9 +17,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Does backend checks and connects to repository
+     * @param user object to be saved to database
+     * @return boolean if correctly saved
+     */
     public boolean signupUser(User user) {
 
-        if (hasInvValidCPR(user)) return false;
+        if (hasInvalidCPR(user)) return false;
         if (hasInvalidPhoneNo(user)) return false;
         if (hasEmptyFields(user)) return false;
         if (hasEmptyPassword(user)) return false;
@@ -28,38 +33,52 @@ public class UserService {
         return userRepository.saveNewUser(user);
     }
 
+    /**
+     * Does backend checks and connects to repository
+     * @param user object for to updated in database
+     * @return boolean if correctly updated
+     */
     public boolean updateUser(User user) {
         if (hasInvalidEmail(user)) return false;
         if (hasInvalidPhoneNo(user)) return false;
         if (hasEmptyFields(user)) return false;
 
-        return userRepository.updateRemoteUser(user);
+        return userRepository.updateUser(user);
     }
 
+    // connects to repository
     public void updateAuthority(Authority authority) {
         userRepository.updateAuthority(authority);
     }
 
+    // connects to repository
     public void changeEnabledUser(User user) {
         userRepository.changeEnabledUser(user);
     }
 
+    // connects to repository
     public User fetchUser(String username) {
         return userRepository.fetchUser(username);
     }
 
+    // connects to repository
     public Authority fetchAuthority(User user) {
         return userRepository.fetchAuthority(user);
     }
 
+    // connects to repository
     public User fetchRemoteUser() {
         return userRepository.fetchRemoteUser();
     }
 
+    // connects to repository
     public List<User> fetchAllUsers() {
         return userRepository.fetchAllUsers();
     }
 
+    /**
+     * @return List of users and their belonging authority objects
+     */
     public List<Tuple2<User, Authority>> fetchAllUsersAndAuthorities() {
         List<Tuple2<User, Authority>> userList = new ArrayList<>();
 
@@ -70,6 +89,10 @@ public class UserService {
         return userList;
     }
 
+    /**
+     * @param searchTerm input by user
+     * @return List of users that match search term
+     */
     public List<Tuple2<User, Authority>> searchAllUsers(String searchTerm) {
 
         List<Tuple2<User, Authority>> userList = new ArrayList<>();
@@ -81,10 +104,15 @@ public class UserService {
         return userList;
     }
 
+    // connects to repository
     public String checkPrivilege(String username) {
         return userRepository.getAuthority(username);
     }
 
+    /**
+     * @param user object
+     * @return boolean depending on if user has empty email and name fields
+     */
     private boolean hasEmptyFields(User user) {
         if (user.getEmail().isBlank())     return true;
         if (user.getFirstname().isBlank()) return true;
@@ -92,15 +120,27 @@ public class UserService {
         else                               return false;
     }
 
+    /**
+     * @param user object
+     * @return true if user has empty password field
+     */
     private boolean hasEmptyPassword(User user) {
         return user.getPassword().isBlank();
     }
 
+    /**
+     * @param user object
+     * @return true if user's email fails validation
+     */
     public boolean hasInvalidEmail(User user) {
         EmailValidator validator = EmailValidator.getInstance();
         return !validator.isValid(user.getEmail());
     }
 
+    /**
+     * @param user object
+     * @return true if user's phone number fails validation
+     */
     private boolean hasInvalidPhoneNo(User user) {
 
         try {
@@ -111,7 +151,11 @@ public class UserService {
         return user.getPhone_no().length() != 8;
     }
 
-    private boolean hasInvValidCPR(User user) {
+    /**
+     * @param user object
+     * @return true if user's CPR number fails validation
+     */
+    private boolean hasInvalidCPR(User user) {
 
         String cpr = user.getUsername();
 

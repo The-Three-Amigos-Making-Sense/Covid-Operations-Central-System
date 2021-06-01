@@ -4,7 +4,7 @@ package com.thethreeamigosmakingsense.covidoperationscentralsystem.Model;
 public class Authority {
 
     private String username; // actually CPR
-    private String authority;
+    private String authority; // user's role
 
     public Authority() {}
 

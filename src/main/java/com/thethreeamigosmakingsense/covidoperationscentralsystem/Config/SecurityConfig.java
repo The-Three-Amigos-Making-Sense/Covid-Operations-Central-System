@@ -19,6 +19,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    /**
+     * Method to enable JdbcAuthentication. This method handles login.
+     * @param auth
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
@@ -31,6 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "where username = ?");
     }
 
+    /**
+     * Method to enable web security. It ensures users have to be authenticated to
+     * access all pages that haven't been permitted outside the authentication wall.
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -49,6 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * Enables password encoding with BCrypt. Encryption strength is set to 12, as is recommended.
+     * @return
+     */
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder(12);

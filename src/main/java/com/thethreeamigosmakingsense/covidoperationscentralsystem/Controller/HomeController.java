@@ -1,7 +1,6 @@
 package com.thethreeamigosmakingsense.covidoperationscentralsystem.Controller;
 
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Model.User;
-import com.thethreeamigosmakingsense.covidoperationscentralsystem.Repository.UserRepository;
 import com.thethreeamigosmakingsense.covidoperationscentralsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,7 @@ public class HomeController {
 
         User user = userService.fetchRemoteUser();
 
-        model.addAttribute("firstname", user.getFirstname());
+        model.addAttribute("firstname", user.getFirstname()); // displays user's firstname on home page
 
         return "home/home";
     }

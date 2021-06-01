@@ -23,10 +23,15 @@ public class BookingService {
     @Autowired
     private HttpServletRequest http;
 
+    // connects to repository
     public Booking fetchBookingByID(int id) {
         return bookingRepository.fetchBookingByID(id);
     }
 
+    /**
+     * Method calls BookingRepository for all bookings and attaches their belonging BookingType objects
+     * @return
+     */
     public List<Tuple2<Booking, BookingType>> fetchAllBookings() {
         List<Tuple2<Booking, BookingType>> bookingList = new ArrayList<>();
 
@@ -38,6 +43,7 @@ public class BookingService {
         return bookingList;
     }
 
+    // connects to repository
     public void updateStatus(BookingType bookingtype) {
         bookingRepository.updateStatus(bookingtype);
     }
@@ -71,6 +77,11 @@ public class BookingService {
         return bookingList;
     }
 
+    /**
+     * @param username of user
+     * @param type of booking (test or vaccine)
+     * @return boolean true if user has any active bookings of type
+     */
     public boolean userHasActiveBookingOfType(String username, String type) {
 
         List<Booking> bookingList = bookingRepository.fetchUsersBookings(username);
@@ -89,6 +100,10 @@ public class BookingService {
         return false;
     }
 
+    /**
+     * @param username of user
+     * @return true if user has received their second vaccine shot
+     */
     public boolean userHasSecondShot(String username) {
 
         List<Booking> bookingList = bookingRepository.fetchUsersBookings(username);
@@ -152,6 +167,11 @@ public class BookingService {
         return bookingRepository.createBooking(booking, bookingType);
     }
 
+    /**
+     * Method that automatically books an appointment for the second vaccine shot 24 days after receiving the first shot
+     * @param username of user
+     * @param firstVaccine Vaccine object
+     */
     public void autoBookSecondShot(String username, Vaccine firstVaccine) {
 
         // Creates objects needed for booking the second shot. The booking will be set 24 days after the first shot
@@ -243,6 +263,10 @@ public class BookingService {
         return times;
     }
 
+    /**
+     * @param ldt LocalDateTime object
+     * @return ldt + 10 minutes or 9am on the next day if past 7pm
+     */
     private LocalDateTime incrementDateTime(LocalDateTime ldt) {
 
         LocalDateTime increment = ldt.plusMinutes(10);

@@ -25,11 +25,17 @@ public class BookingRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * Method for saving a new booking to database
+     * @param booking object
+     * @param bookingType TestResult or Vaccine object
+     * @return boolean true if successfully save to database
+     */
     public boolean createBooking(Booking booking, BookingType bookingType) {
 
         String sql;
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        KeyHolder keyHolder = new GeneratedKeyHolder(); // holds booking_id when generated
 
         try {
             sql = "insert into bookings values (?, ?, ?, ?, ?);";
@@ -41,7 +47,7 @@ public class BookingRepository {
                         ps.setString(2, booking.getUsername());
                         ps.setString(3, booking.getDate());
                         ps.setString(4, booking.getTime());
-                        ps.setString(5, booking.getType().toString());
+                        ps.setString(5, booking.getType());
                         return ps;
                     },
                     keyHolder);
@@ -64,12 +70,19 @@ public class BookingRepository {
         return true;
     }
 
+    /**
+     * @return list of all bookings in database
+     */
     public List<Booking> fetchAllBookings() {
         String sql = "SELECT * FROM bookings";
         RowMapper<Booking> rowMapper = new BeanPropertyRowMapper<>(Booking.class);
         return jdbcTemplate.query(sql, rowMapper);
     }
 
+    /**
+     * @param type test or vaccine
+     * @return list of all bookings by type
+     */
     public List<Booking> fetchAllBookingsByType(String type) {
 
         String sql = "SELECT * FROM bookings WHERE type = ?";
@@ -77,6 +90,10 @@ public class BookingRepository {
         return jdbcTemplate.query(sql, rowMapper, type);
     }
 
+    /**
+     * @param id of booking
+     * @return Booking object with id
+     */
     public Booking fetchBookingByID(int id) {
 
         String sql = "SELECT * FROM bookings WHERE booking_id = ?";
@@ -84,6 +101,10 @@ public class BookingRepository {
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
+    /**
+     * @param username of user
+     * @return list of bookings by user with username
+     */
     public List<Booking> fetchUsersBookings(String username) {
 
         String sql = "SELECT * FROM bookings WHERE username = ? ORDER BY booking_id DESC";
@@ -92,6 +113,10 @@ public class BookingRepository {
         return jdbcTemplate.query(sql, rowMapper, username);
     }
 
+    /**
+     * @param booking object
+     * @return BookingType belonging to booking by foreign key
+     */
     public BookingType fetchStatus(Booking booking) {
 
         String type = booking.getType();
@@ -108,6 +133,10 @@ public class BookingRepository {
         }
     }
 
+    /**
+     * Updates Status column in TestResult or Vaccine table by foreign key
+     * @param bookingType TestResult or Vaccine object
+     */
     public void updateStatus(BookingType bookingType) {
 
         String sql;

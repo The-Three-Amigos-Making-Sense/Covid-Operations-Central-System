@@ -9,6 +9,8 @@ public class User {
     private String password;
     private boolean enabled = true;
 
+    public User() {}
+
     public User(String username, String email, String firstname, String lastname, String phone_no, String password) {
         this.username = username;
         this.email = email;
@@ -16,10 +18,6 @@ public class User {
         this.lastname = lastname;
         this.phone_no = phone_no;
         this.password = password;
-    }
-
-    public User() {
-
     }
 
     public String getUsername() {

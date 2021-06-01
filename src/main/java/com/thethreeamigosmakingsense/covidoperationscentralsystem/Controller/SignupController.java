@@ -17,11 +17,17 @@ public class SignupController {
     @Autowired
     private UserService userService;
 
+    /**
+     * GetMapping for account registration
+     * @param model model
+     * @return html
+     */
     @GetMapping("/signup")
     private String signUp(Model model) {
 
-        model.addAttribute("navItem", "signup");
+        model.addAttribute("navItem", "signup"); // active menu
 
+        // authenticated users are not allowed here
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "signup/signup";
@@ -30,10 +36,15 @@ public class SignupController {
         return "redirect:/";
     }
 
+    /**
+     * PostMapping for account registration
+     * @param user object
+     * @return html
+     */
     @PostMapping("/signup")
     private String signUp(User user) {
 
-        if (userService.signupUser(user)) {
+        if (userService.signupUser(user)) { // if user was saved to database
             return "signup/success";
         }
         else {
@@ -41,9 +52,16 @@ public class SignupController {
         }
     }
 
+    /**
+     * GetMapping for when account registration is a success
+     * Authenticated users are prevented from accessing the page, and the page is not made public
+     * in SecurityConfig. So it can only be accessed upon successful account registration.
+     * @return html
+     */
     @GetMapping("/success")
     private String success() {
 
+        // Authenticated users are not allowed here
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "signup/success";

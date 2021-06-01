@@ -14,25 +14,35 @@ public class ProfileController {
     @Autowired
     private UserService userService;
 
+    /**
+     * GetMapping for user profile page
+     * @param model model
+     * @return html
+     */
     @GetMapping("/profile")
     private String profile(Model model) {
 
-        model.addAttribute("navItem", "profile");
-        model.addAttribute("user", userService.fetchRemoteUser());
+        model.addAttribute("navItem", "profile"); // active menu
+        model.addAttribute("user", userService.fetchRemoteUser()); // user object
 
         return "profile/profile";
     }
 
+    /**
+     * PostMapping for changing user details
+     * @param model model
+     * @param user object
+     * @return html
+     */
     @PostMapping("/profile")
     private String profile(Model model, User user) {
 
-        String returnString;
-        if (userService.updateUser(user)) returnString = "profile/profile";
+        String returnString; // html
+        if (userService.updateUser(user)) returnString = "profile/profile"; // if saved to database
         else returnString = "redirect:/profile?error";
 
-
-        model.addAttribute("navItem", "profile");
-        model.addAttribute("user", userService.fetchRemoteUser());
+        model.addAttribute("navItem", "profile"); // active menu
+        model.addAttribute("user", userService.fetchRemoteUser()); // user object
 
         return returnString;
     }

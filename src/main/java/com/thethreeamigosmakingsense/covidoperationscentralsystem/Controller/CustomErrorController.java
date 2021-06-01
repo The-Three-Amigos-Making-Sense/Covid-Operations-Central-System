@@ -12,6 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class CustomErrorController implements ErrorController {
 
+    /**
+     * Handles exceptions.
+     * @param model model
+     * @param http servlet request
+     * @return custom error page html
+     */
     @GetMapping("/error")
     private String error(Model model, HttpServletRequest http) {
 
@@ -58,17 +64,24 @@ public class CustomErrorController implements ErrorController {
             }
         }
 
-        model.addAttribute("error", error);
-        model.addAttribute("msg", msg);
+        model.addAttribute("error", error); // Page Title
+        model.addAttribute("msg", msg); // Page Message
 
         return "error/error";
     }
 
+    /**
+     * I'm a Teapot exception easter egg
+     */
     @GetMapping("/teapot")
     private void teapot() {
         throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
     }
 
+    /**
+     * required method from implementing ErrorController
+     * @return null
+     */
     @Override
     public String getErrorPath() {
         return null;
